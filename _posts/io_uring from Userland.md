@@ -1,3 +1,14 @@
+---
+layout: single
+title:  "io_uring from Userland"
+date: 2026-03-27
+classes: wide
+tags:
+  - Security Research
+  - Linux
+  - io_uring
+---
+
 You know the pains if you've written performance sensitive I/O code on Linux. Every `read()` and `write()` is a round trip into the kernel. POSIX AIO was a mess, and `epoll` still makes you do the actual I/O call yourself once an fd is ready.
 
 `io_uring` introduced in Linux 5.1 fixes this. It sets up two ring buffers shared between your process and the kernel. You drop requests into the submission queue, the kernel drops results into the completion queue. No context switches required!
