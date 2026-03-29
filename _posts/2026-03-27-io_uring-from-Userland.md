@@ -45,7 +45,7 @@ int main(void) {
 our file.txt is a simple text file as the name implies, and holds the string "Hello world!".
 Digging inside gdb:
 We first call `io_uring_queue_init` with the following arguments:
-![diagram](/assets/images/Pasted image 20260323192138.png)
+![diagram](/assets/images/Pasted image 20260323192138.png) 
 where `0x7fffffffcd30` is the address of our `io_uring` object `ring`. We then call `io_uring_queue_init`.
 ```cpp
 int io_uring_queue_init(unsigned entries, struct io_uring *ring, unsigned flags)
@@ -74,11 +74,11 @@ struct io_cqring_offsets cq_off;
 };
 ```
 now....
-![[Pasted image 20260323193014.png]]
+![diagram](/assets/images/Pasted image 20260323193014.png)
 moving ahead... we call `io_uring_queue_init_params` with the following arguments:
-![[Pasted image 20260327213150.png]]
+![diagram](/assets/images/Pasted image 20260327213150.png)
 Keep in mind that `entries` is the number of entries we want which is the first argument, `ring` is our struct `io_uring` object which is our second argument, and `p` is our `io_uring_params` struct object which is currently all set to 0, our third argument.
-![[Pasted image 20260327212857.png]]
+![diagram](/assets/images/Pasted image 20260327212857.png)
 ```cpp
 int io_uring_queue_init_params(unsigned entries, struct io_uring *ring, struct io_uring_params *p)
 {
@@ -89,8 +89,8 @@ int io_uring_queue_init_params(unsigned entries, struct io_uring *ring, struct i
 }
 ```
 `io_uring_queue_init_try_nosqarr` expects 5 arguments. We are already familiar with the first 3, the 4th one is the address of our buffer and 5th one is the size of our buffer.
-![[Pasted image 20260327213425.png]]
-![[Pasted image 20260327213527.png]]
+![diagram](/assets/images/Pasted image 20260327213425.png)
+![diagram](/assets/images/Pasted image 20260327213527.png)
 ```cpp
 static int io_uring_queue_init_try_nosqarr(unsigned entries, struct io_uring *ring, struct io_uring_params *p, void *buf, size_t buf_size)
 {
@@ -109,15 +109,15 @@ static int io_uring_queue_init_try_nosqarr(unsigned entries, struct io_uring *ri
 }
 ```
 here we see we've set flags in our `p` object by ORing with `IORING_SETUP_NO_SQARRAY`. 
-![[Pasted image 20260323195646.png]]
+![diagram](/assets/images/Pasted image 20260323195646.png)
 ```cpp
 #define IORING_SETUP_NO_SQARRAY (1U << 16)
 ```
 Setting `IORING_SETUP_NO_SQARRAY` says **skip the SQ array entirely**. The kernel reads SQEs directly in order without the indirection layer and then calls `__io_uring_queue_init_params`.  
-![[Pasted image 20260327213825.png]]
-![[Pasted image 20260327213926.png]]
+![diagram](/assets/images/Pasted image 20260327213825.png)
+![diagram](/assets/images/Pasted image 20260327213926.png)
 seeing our flags which we set in `p`:
-![[Pasted image 20260327214047.png]]
+![diagram](/assets/images/Pasted image 20260327214047.png)
 We won't go into the depth of that since it's a pretty long function. However, it makes some checks and then calls `__sys_io_uring_setup`...
 ```cpp
 fd = __sys_io_uring_setup(entries, p);
@@ -129,14 +129,14 @@ static inline int __sys_io_uring_setup(unsigned int entries, struct io_uring_par
 	return (int) __do_syscall2(__NR_io_uring_setup, entries, p);
 }
 ```
-![[Pasted image 20260327214453.png]]
+![diagram](/assets/images/Pasted image 20260327214453.png)
 We aren't going to go into the details of the system call for now since that will probably covered in future posts. Moving on, we backtrack to `__io_uring_queue_init_params`  and check the file descriptor returned to us by `__sys_io_uring_setup` since we did
 ```cpp title=__io_uring_queue_init_params
 fd = __sys_io_uring_setup(entries, p);
 ```
-![[Pasted image 20260327214909.png]]
+![diagram](/assets/images/Pasted image 20260327214909.png)
 our green arrows tell us till where we have backtracked and green coloured box is our current function we're analyzing.
-![[Pasted image 20260324001655.png]]
+![diagram](/assets/images/Pasted image 20260324001655.png)
 
  And... what is happening with `fd` here?
 
@@ -160,7 +160,7 @@ if ((p->flags & IORING_SETUP_NO_MMAP) &&
 ```
 
 This says that if we allocated our own memory for the rings (`NO_MMAP` mode) and that memory belongs to the kernel not the application (no `INT_FLAG_APP_MEM`), unmap it now before bailing out. If the application provided its own memory, we leave it alone. It's not our headache, and since we never set `IORING_SETUP_NO_MMAP` and `INT_FLAG_APP_MEM` and neither is our `fd` lower than 0, we don't come on this path. GDB output tells us that no memory has been allocated for userland, however, recall that an `fd` having `0x3` was returned to us by the kernel. When `sys_io_uring_setup()` returned `fd 3` successfully, the kernel had already done the memory work, but we had not, and later we'll see that when we `mmap` in userspace, we use the `fd` returned to us by the kernel.
-![[Pasted image 20260327221506.png]]
+![diagram](/assets/images/Pasted image 20260327221506.png)
 
 For the *mapping* success path, we take two routes. The first path is the following:
 ```c
@@ -170,9 +170,9 @@ if (!(p->flags & IORING_SETUP_NO_MMAP)) {
 ```
 
 Here the kernel allocated the ring memory itself. But that memory lives in kernel space. To actually use it from your application, which is in userspace, we need to map it into our process's address space, and that's what `mmap` does. `io_uring_queue_mmap` uses the `fd` to ask the kernel "let me see the ring memory you allocated." 
-![[Pasted image 20260327222915.png]]
+![diagram](/assets/images/Pasted image 20260327222915.png)
 now we have the following mates populated.
-![[Pasted image 20260327221814.png]]
+![diagram](/assets/images/Pasted image 20260327221814.png)
 
 ## talking of io_uring_mmap....
 After the kernel creates the `io_uring` object ring, it lives in kernel memory. Our process cannot touch it yet. This function's entire job is to bridge that gap. It maps the kernel's ring memory into our process's address space so we can read and write it directly just like normal arrays. Three separate regions need to be mapped:
@@ -207,7 +207,7 @@ ulong resv2;
 }
 ```
 this makes:
-![[Pasted image 20260324010108.png]]
+![diagram](/assets/images/Pasted image 20260324010108.png)
 now we have...
 ```c
 if (p->features & IORING_FEAT_SINGLE_MMAP) {
@@ -218,7 +218,7 @@ if (p->features & IORING_FEAT_SINGLE_MMAP) {
 ```
 
 Newer kernels support a feature called `IORING_FEAT_SINGLE_MMAP`. Instead of mapping the SQ and CQ rings separately, both rings are packed into one single contiguous memory region. This reduces the number of `mmap` calls from two down to one. To make this work, both rings need to be the same size  so whichever is larger, the other is padded up to match.
-![[Pasted image 20260324010712.png]]
+![diagram](/assets/images/Pasted image 20260324010712.png)
 since its all ones, and...
 ```cpp
 #define IORING_FEAT_SINGLE_MMAP (1U << 0)
@@ -251,7 +251,7 @@ if (p->features & IORING_FEAT_SINGLE_MMAP) {
 ```
 
 If single mmap is supported, the CQ ring is already inside the same memory region as the SQ ring, so just point `cq->ring_ptr` at the same address. No second mapping is needed. If not, then do a second `mmap` call for the CQ ring separately using `IORING_OFF_CQ_RING` as the offset.
-![[Pasted image 20260324012809.png]]
+![diagram](/assets/images/Pasted image 20260324012809.png)
 Now we map the SQE array:
 ```c
 sq->sqes = __sys_mmap(0, sq->sqes_sz, PROT_READ | PROT_WRITE,
@@ -265,18 +265,18 @@ Setting up our pointers....
 io_uring_setup_ring_pointers(p, sq, cq);
 return 0;
 ```
-![[Pasted image 20260328010935.png]]
+![diagram](/assets/images/Pasted image 20260328010935.png)
 
 
 Now that all three regions are mapped into our process, this function is called `io_uring_setup_ring_pointers` with the arguments:
-![[Pasted image 20260328011228.png]]
+![diagram](/assets/images/Pasted image 20260328011228.png)
 We will shortly be discussing `io_uring_setup_ring_pointers` since it's going to be called from `__io_queue_init_params` as well. Looking at our structs after returning back from `io_uring_mmap`...
-![[Pasted image 20260324012624.png]]
+![diagram](/assets/images/Pasted image 20260324012624.png)
 Now our struct `io_uring_sq` is populated. similarly,
-![[Pasted image 20260324012649.png]]
+![diagram](/assets/images/Pasted image 20260324012649.png)
 We also return from `io_uring_queue_mmap`.
 After this call, our process can read and write the SQ and CQ rings directly as if they were just normal arrays in our RAM. If that mapping fails, the `fd` is closed and the error is returned. We are going to have many pointers both from userland and kernel land pointing at our memory, but for understanding purposes, if we take an example of how SQEs exist in memory:
-![[Pasted image 20260327225026.png|600]]
+![diagram](/assets/images/Pasted image 20260327225026.png|600)
 
 and so does the rest exist in memory.
 
@@ -287,9 +287,9 @@ else {
 }
 ```
 lets dive into it
-![[Pasted image 20260328002207.png]]
+![diagram](/assets/images/Pasted image 20260328002207.png)
 We call this function with the following arguments:
-![[Pasted image 20260328002616.png]]
+![diagram](/assets/images/Pasted image 20260328002616.png)
 ## The Goldmine:
 ```cpp
 void io_uring_setup_ring_pointers(struct io_uring_params *p,
@@ -325,7 +325,7 @@ Just take a moment and admire its beauty. How everything seems to make sense now
 After `mmap` completes, our process has a raw blob of shared memory. It knows the blob starts at `ring_ptr` and is `ring_sz` bytes large. But it has no idea where inside that blob the head pointer lives, where the tail pointer lives, where the entries are, and so on.
 
 This function's entire job is to **calculate the address of every important field** inside that blob and store those addresses so the rest of the library can just do `*sq->khead` instead of doing pointer arithmetic every single time. Think of it like receiving a moving box full of items with no labels. This function opens the box, finds every item, and sticks a label on each one so you can grab anything instantly later.
-![[Pasted image 20260328003511.png|center|600]]
+![diagram](/assets/images/Pasted image 20260328003511.png|center|600)
 Note that every single line follows the same formula:
 ```c
 sq->khead = sq->ring_ptr + p->sq_off.head;
@@ -335,7 +335,7 @@ sq->khead = sq->ring_ptr + p->sq_off.head;
 - `p->sq_off.head` --> the byte offset of the head field within that blob, as told to us by the kernel during setup
 - Adding them together gives the **exact memory address** of that field
 so if we take the example of `sq->kring_mask`:
-![[Pasted image 20260328003749.png]]
+![diagram](/assets/images/Pasted image 20260328003749.png)
 The same happens with other fields and with cq ring fields. If we take a look at the last 4 lines:
 ```c
 sq->ring_mask    = *sq->kring_mask;
@@ -347,7 +347,7 @@ cq->ring_entries = *cq->kring_entries;
 These dereference the pointers immediately to **save the values locally**. The ring mask and ring entries never change after setup, the kernel will never modify them. So instead of dereferencing a shared memory pointer every single time we need the mask, we copy the value once into a plain local field and read that instead. In it we already provided the memory ourselves, so there is nothing to map. The kernel just needs to set up the internal pointers so the SQ and CQ structs know where their head, tail, and data regions are within the memory provided. `io_uring_setup_ring_pointers` does this job, no mapping needed, just pointer arithmetic. since we never set `IORING_SETUP_NO_MMAP`
 
 now lets return
-![[Pasted image 20260328004143.png]]
+![diagram](/assets/images/Pasted image 20260328004143.png)
 now we do...
 ```cpp
 sq_entries = ring->sq.ring_entries;
@@ -379,14 +379,15 @@ if (p->flags & IORING_SETUP_REGISTERED_FD_ONLY) {
 Since `IORING_SETUP_REGISTERED_FD_ONLY`  was never set, we also don't take this branch, but this is actually where `ring_fd` and `enter_ring_fd` diverge. In normal mode we do `ring->ring_fd = fd`.  We use the regular OS file descriptor for everything.
 
 In `IORING_SETUP_REGISTERED_FD_ONLY` mode, the ring was set up with a **registered file descriptor** instead of a normal one. Registered file descriptors are stored in the kernel's own table rather than our process's file descriptor table. From a very high level `struct io_rsrc_data` is used to keep metadata about a set of registered resources and track their reference count etc, `tags` is a 2D array of tags or identifiers and `struct io_ring_ctx`is a pointer to the `io_uring` context which ties the resource data to a specific `io_uring` instance. An object of `io_ring_ctx` holds the state of the ring.
-![[Pasted image 20260328164528.png|center|300]]
+![diagram](/assets/images/Pasted image 20260328164528.png|center|300)
 
 They are faster to look up but cannot be used like normal fds in all situations. So `ring->ring_fd` is set to `-1` meaning  that "there is no normal fd for this ring" and two internal flags are set:
 - `INT_FLAG_REG_RING` --> "this ring uses a registered fd"
 - `INT_FLAG_REG_REG_RING` --> "the registered fd was registered by the setup process itself, not manually by the user"
 and we do some other checks. 
 then we return our already zeroed out `ret` back to `io_uring_queue_init_try_nosqarr`, then back to `io_uring_queue_init_params` and then return it to `io_uring_queue_init`, which returns it to our `main` function which isn't getting saved anywhere. This is how the struct gets prepared. pretty... twisty. 
-![[Pasted image 20260328163535.png]]We then continue to `io_uring_get_sqe`, which takes us to `_io_uring_get_sqe`. Because `io_uring_prep_read` needs somewhere to write the operation details into. Think of it this way, that the SQE is a form. `io_uring_get_sqe` hands us a blank form. `io_uring_prep_read` fills it out. 
+![diagram](/assets/images/Pasted image 20260328163535.png)
+We then continue to `io_uring_get_sqe`, which takes us to `_io_uring_get_sqe`. Because `io_uring_prep_read` needs somewhere to write the operation details into. Think of it this way, that the SQE is a form. `io_uring_get_sqe` hands us a blank form. `io_uring_prep_read` fills it out. 
 ```cpp
     struct io_uring_sqe *sqe = io_uring_get_sqe(&ring);
     io_uring_prep_read(sqe, fd, buf, sizeof(buf), 0);     
@@ -395,7 +396,7 @@ then we return our already zeroed out `ret` back to `io_uring_queue_init_try_nos
  ```cpp
  return _io_uring_get_sqe(ring);
  ```
-![[Pasted image 20260328165659.png]]
+![diagram](/assets/images/Pasted image 20260328165659.png)
 ### The two pointers that matter
 
 ```c
@@ -405,7 +406,7 @@ unsigned head = io_uring_load_sq_head(ring), tail = sq->sqe_tail;
 The ring operates like a circular queue tracked by two numbers:
 - **`head`** is where the kernel is currently consuming from. The kernel advances this as it picks up and processes our submissions. 
 - **`tail`** is where we are currently producing to. We advance this every time you add a new SQE. We own this.
-![[anusf.gif|800]]
+![diagram](/assets/images/anusf.gif|800)
 
 The number of SQEs currently in flight which are submitted but not yet consumed by the kernel is always `tail - head`.
 ```c
@@ -414,7 +415,7 @@ if (tail - head >= sq->ring_entries)
 ```
 
 If the distance between tail and head has reached the ring's total capacity, every slot is occupied and there is nowhere to put a new SQE in, so we return NULL. 
-![[Pasted image 20260328171520.png|600]]
+![diagram](/assets/images/Pasted image 20260328171520.png|600)
 The caller must wait for the kernel to consume some entries before submitting more. Now lets find the actual slot:
 ```c
 sqe = &sq->sqes[(tail & sq->ring_mask) << io_uring_sqe_shift(ring)];
@@ -423,7 +424,7 @@ sqe = &sq->sqes[(tail & sq->ring_mask) << io_uring_sqe_shift(ring)];
 Three things are happening here:
 
 1- **`tail & sq->ring_mask`** The ring mask is `sq_entries - 1` (since entry count is always a power of two).
-![[Pasted image 20260328171706.png]]
+![diagram](/assets/images/Pasted image 20260328171706.png)
 ANDing the tail index with it wraps the tail around the ring which is the power of two modulo trick. So if you have 256 entries and tail is 257, you get slot 1.
 
 2- **`<< io_uring_sqe_shift(ring)`** This accounts for the fact that `io_uring` supports two SQE sizes:
@@ -441,7 +442,8 @@ Claim this slot by moving the tail forward by one. The slot is now ours. Note th
 ```c
 io_uring_initialize_sqe(sqe);
 ```
-![[Pasted image 20260328172225.png]]A call to `io_uring_initialize_sqe` which simply zeroes out all the following fields of `io_uring_sqe`. 
+![diagram](/assets/images/Pasted image 20260328172225.png)
+A call to `io_uring_initialize_sqe` which simply zeroes out all the following fields of `io_uring_sqe`. 
 ```cpp
 IOURINGINLINE void io_uring_initialize_sqe(struct io_uring_sqe *sqe)
 	LIBURING_NOEXCEPT
@@ -461,7 +463,7 @@ We then return the same `sqe` back to our main function. moving on in our code..
 ```cpp
     io_uring_prep_read(sqe, fd, buf, sizeof(buf), 0);
 ```
-![[Pasted image 20260328172753.png|400]]
+![diagram](/assets/images/Pasted image 20260328172753.png|400)
 lets take a look at the function parameter:
 ```cpp
   
@@ -472,10 +474,10 @@ void *buf, unsigned nbytes, __u64 offset) LIBURING_NOEXCEPT
 }
 ```
 taking a look at the arguments:
-![[Pasted image 20260324194137.png]]
+![diagram](/assets/images/Pasted image 20260324194137.png)
 from `io_uring_prep_read` we go on to `io_uring_prep_rw` with the following arguments:
-![[Pasted image 20260324204547.png]]
-![[Pasted image 20260328173148.png]]
+![diagram](/assets/images/Pasted image 20260324204547.png)
+![diagram](/assets/images/Pasted image 20260328173148.png)
 taking a look at our function definition:
 ```cpp
 IOURINGINLINE void io_uring_prep_rw(int op, struct io_uring_sqe *sqe, int fd, const void *addr, unsigned len, __u64 offset) LIBURING_NOEXCEPT
@@ -488,7 +490,7 @@ sqe->len = len;
 }
 ```
 now if we see what our new fields are set as, they are:
-![[Pasted image 20260324205023.png]]
+![diagram](/assets/images/Pasted image 20260324205023.png)
 We know that `addr` is actually the address of our buffer, `opcode` is `IORING_OP_READ` which is `0x16`. `len` is `0x1000` since we set length of the buffer as `4096`. `sqe->fd` is the file descriptor of our `file.txt` and `sqe->off` is the offset in the file from where we'll start reading. We finally return to our `main` function. 
 Now lets finally submit what we've been prepping from now using...
 ```cpp
@@ -511,13 +513,13 @@ return __io_uring_submit(ring, __io_uring_flush_sq(ring), wait_nr);
 ```
 we'll zoom into `__io_uring_flush_sq first`.  It moves our prepared SQEs into the actual shared submission ring so the kernel can see them.
 ### `__io_uring_flush_sq` 
-![[Pasted image 20260328173630.png]]
+![diagram](/assets/images/Pasted image 20260328173630.png)
 We first grab the local tail which is the number that has been advancing every time we called `io_uring_get_sqe`.
 ```c
 unsigned tail = sq->sqe_tail;
 ```
  This represents how many `SQEs` we have prepared in total.
-![[Pasted image 20260324232639.png]]
+![diagram](/assets/images/Pasted image 20260324232639.png)
 The SQ_REWIND special case....
 ```c
 if (ring->flags & IORING_SETUP_SQ_REWIND) {
@@ -535,9 +537,9 @@ if (sq->sqe_head != tail) {
 ```
 
 If `sqe_head` already equals `tail`, nothing new was prepared since the last flush so skip everything, otherwise advance `sqe_head` to match `tail`, which marks all prepared SQEs as flushed.
-![[Pasted image 20260324232858.png]]
+![diagram](/assets/images/Pasted image 20260324232858.png)
  and after the assignment
- ![[Pasted image 20260324232932.png]]
+ ![diagram](/assets/images/Pasted image 20260324232932.png)
  next we have...
 ```c
 if (!(ring->flags & IORING_SETUP_SQPOLL))
@@ -551,7 +553,7 @@ Without `SQPOLL` there's a plain direct write `*sq->ktail = tail`. This is safe 
 
 With `SQPOLL` a dedicated kernel thread is watching the ring continuously. That thread could be reading the tail at the exact same moment we are writing it. The atomic release store prevents any possibility of the kernel seeing a half written value or seeing the tail update before our `SQE` writes are complete.
 Here, since `IORING_SETUP_SQPOLL` is not set, the if condition will evaluate as true, and our `ktail` will become equal to 1, as is our tail variable.
-![[Pasted image 20260324233211.png]]
+![diagram](/assets/images/Pasted image 20260324233211.png)
 
 ```c
 return tail - IO_URING_READ_ONCE(*sq->khead);
@@ -560,13 +562,13 @@ return tail - IO_URING_READ_ONCE(*sq->khead);
 Returns how many `SQEs` are currently in the ring waiting to be consumed. The difference is the outstanding workload. `IO_URING_READ_ONCE` is used here because in `SQPOLL` mode the kernel thread could be advancing `khead` right now as it consumes entries. A plain read could get a torn or cached value. `READ_ONCE` forces a single atomic read from the actual memory location.
 
 Back in our `__io_uring_submit_and_wait`. 
-![[Pasted image 20260324233332.png]]
+![diagram](/assets/images/Pasted image 20260324233332.png)
 we see the return value is 1.
 so now we make the following call:
 ```cpp
 __io_uring_submit(ring, 1, wait_nr, false);
 ```
-![[Pasted image 20260328174106.png]]
+![diagram](/assets/images/Pasted image 20260328174106.png)
 In `__io_uring_submit` we do:
 ```cpp
  bool cq_needs_enter = getevents || wait_nr || cq_ring_needs_enter(ring);
@@ -585,15 +587,15 @@ static inline bool cq_ring_needs_flush(struct io_uring *ring)
 return IO_URING_READ_ONCE(*ring->sq.kflags) & (IORING_SQ_CQ_OVERFLOW | IORING_SQ_TASKRUN);
 }
 ```
-![[Pasted image 20260328174342.png]]
+![diagram](/assets/images/Pasted image 20260328174342.png)
 recall that we never set `IORING_SQ_TASKRUN` and `IORING_SQ_CQ_OVERFLOW`. Checking it in GDB:
-![[Pasted image 20260325193833.png]]
+![diagram](/assets/images/Pasted image 20260325193833.png)
 so we'll return false from `cq_ring_needs_flush` and `cq_ring_needs_enter` will return:
 ```cpp
 return (0 || 0);
 ```
 Back to `__io_uring_submit`checking return value of `cq_ring_needs_enter` which was being used in `__io_uring_submit`:
-![[Pasted image 20260325194506.png]]
+![diagram](/assets/images/Pasted image 20260325194506.png)
 the following line of code `__io_uring_submit`:
 ```cpp
  bool cq_needs_enter = getevents || wait_nr || cq_ring_needs_enter(ring);
@@ -603,13 +605,13 @@ will evaluate as:
  bool cq_needs_enter = 0 || 0 || 0;
 ```
 checking it in gdb:
-![[Pasted image 20260325194643.png]]
+![diagram](/assets/images/Pasted image 20260325194643.png)
 `cq_needs_enter = 0`  no syscall is needed for completions at this point. `getevents` was false, `wait_nr` was zero, and `kflags` had no overflow or pending task work. This submit call is purely about getting the `SQE` to the kernel, collecting the completion is handled separately later by `io_uring_wait_cqe`.
 Then we do:
 ```cpp
 unsigned flags = ring_enter_flags(ring);
 ```
-![[Pasted image 20260328180512.png]]
+![diagram](/assets/images/Pasted image 20260328180512.png)
 and seeing `ring_enter_flags`:
 ```cpp
 static inline int ring_enter_flags(struct io_uring *ring)
@@ -618,7 +620,7 @@ static inline int ring_enter_flags(struct io_uring *ring)
 }
 ```
 which again returns 0 since we never set `INT_FLAGS_MASK` meaning no special flags are needed for the `io_uring_enter` syscall.
-![[Pasted image 20260325195257.png]]
+![diagram](/assets/images/Pasted image 20260325195257.png)
 We then return and call `sq_ring_needs_enter` from `__io_uring_submit`. This function answers one question: **does the kernel need to be woken up to process our submissions?**
 In `sq_ring_needs_enter` we make the following check:
 ```c
@@ -650,7 +652,7 @@ In our main function we have:
     io_uring_wait_cqe(&ring, &cqe);
 ```
 with the arguments:
-![[Pasted image 20260325203427.png]]
+![diagram](/assets/images/Pasted image 20260325203427.png)
 `rdi` holds our `io_uring` object `ring` of course, and `rsi` holds our `io_uring_cqe` object.
 Remember our pizza analogy. We filled out an order form (the `SQE`), handed it to the waiter (`io_uring_submit`), and the kitchen started making our pizza. We are now sitting at the table waiting. `io_uring_wait_cqe` is us looking at the collection counter. From here we're calling `io_uring_wait_cqe_nr`:
 ```cpp
@@ -660,10 +662,10 @@ return __io_uring_get_cqe(ring, cqe_ptr, 0, wait_nr, NULL);
 }
 ```
 with the following arguments:
-![[Pasted image 20260325204819.png]]
+![diagram](/assets/images/Pasted image 20260325204819.png)
 this time `wait_nr` is `0x1`, means we will block until we receive one completion. We further call `__io_uring_get_cqe` with the following arguments:
-![[Pasted image 20260325205106.png]]
-![[Pasted image 20260328181423.png]]
+![diagram](/assets/images/Pasted image 20260325205106.png)
+![diagram](/assets/images/Pasted image 20260328181423.png)
 This function's only job is to package up everything needed to wait for a completion and pass it down to the actual implementation. The parameters coming in are:
 **`ring`** which is the `io_uring` instance to wait on.
 
@@ -685,9 +687,9 @@ struct get_data data = {
 ```
 
 Then handed straight to `_io_uring_get_cqe` which does the actual work of checking the `CQ` ring and making the syscall if needed..
-![[Pasted image 20260325210103.png]]
+![diagram](/assets/images/Pasted image 20260325210103.png)
 Then we call `__io_uring_get_cqe`:
-![[Pasted image 20260328182813.png]]
+![diagram](/assets/images/Pasted image 20260328182813.png)
 `_io_uring_get_cqe` is the actual wait loop. This is the heart of the completion side. It loops until it either finds a `CQE` or gives up with an error. Every iteration starts by peeking at the `CQ` ring:
 ```c
 ret = __io_uring_peek_cqe(ring, &cqe, &nr_available);
@@ -748,7 +750,7 @@ if (!looped) {
 We subtract how many SQEs were successfully submitted. If a CQE appeared, break out and return it. Set `looped = true` so the next iteration knows we already went through the kernel once. And how do we peek using \_\_io_uring_peek_cqe?
 
 ### `__io_uring_peek_cqe` — checking the pizza counter
-![[Pasted image 20260328183742.png]]
+![diagram](/assets/images/Pasted image 20260328183742.png)
 This function looks into the `CQ` ring without making any syscall. Pure memory reads. It is the "walk to the counter and check" step before deciding whether to go to sleep and wait. We load the head and tail atomically:
 ```c
 unsigned tail = io_uring_smp_load_acquire(ring->cq.ktail);
@@ -759,7 +761,7 @@ Both loaded with acquire semantics. Remember from our ring setup:
 
 - `ktail` which is owned by the kernel. It advances every time the kernel drops a new completion into the ring.
 - `khead` is owned by us. It advances every time we consume a completion.
-![[anutl.gif|700]]
+![diagram](/assets/images/anutl.gif|700)
 
 We then check if anything is available:
 ```c
@@ -790,16 +792,16 @@ return err;
 Hand back the `CQE` pointer and how many completions were available. If `cqe` is not `NULL`, a real completion was found and the caller can read `cqe->res` for the result of the operation. 
 
 From a very high overview, we have the following picture right now:
-![[Pasted image 20260328213722.png]]
+![diagram](/assets/images/Pasted image 20260328213722.png)
 
 Now if we put it all together....
 
 First lets get the address of `sqe array`
-![[Pasted image 20260325222533.png]]
+![diagram](/assets/images/Pasted image 20260325222533.png)
 now we'll get the first slot:
-![[Pasted image 20260325222609.png]]
+![diagram](/assets/images/Pasted image 20260325222609.png)
 Even if we do `p ring.sq.sqes[0]` in GDB, even that would give us the same thing. However if I do `p ring.sq.sqes[1]` or `p ring.sq.sqes[31]` even that will show me zeroed out memory because recall, we allocated 32 slots in the very beginning. Perfect. So:
-![[Pasted image 20260325223603.png]]
+![diagram](/assets/images/Pasted image 20260325223603.png)
 
 `pad[0]` = `0x1f`  = `31`   which is the `ring_mask` (31 in binary = 00011111, used for wrapping)
 `pad[1]` = `0x20`  = `32`   are `ring_entries`. We have 32 `SQE` slots total
@@ -807,7 +809,7 @@ Even if we do `p ring.sq.sqes[0]` in GDB, even that would give us the same thing
 `pad[3]` = `0x0`  is unused padding
 
 one thing to observe is that...
-![[Pasted image 20260325224407.png]]
+![diagram](/assets/images/Pasted image 20260325224407.png)
 `0x2a` is `42` in decimal. That is the tag we set in our code:
 ```c
 sqe->user_data = 42;
@@ -817,32 +819,32 @@ sqe->user_data = 42;
 This confirms that the `SQE` we are looking at in memory is exactly the one our program filled out. When the kernel finishes our read and writes a `CQE`, it will copy this `0x2a` straight into `cqe->user_data` unchanged, so when we call `io_uring_wait_cqe` and get the completion back, we can check `cqe->user_data == 42` to confirm this completion belongs to our read request and not some other operation.
 
 This we see is our buffer's address:
-![[Pasted image 20260325224851.png]]
+![diagram](/assets/images/Pasted image 20260325224851.png)
 ### taking a lot at `cqes`!
 This is the address of our `cq array`
-![[Pasted image 20260325224934.png]]
+![diagram](/assets/images/Pasted image 20260325224934.png)
 this is our first slot:
-![[Pasted image 20260325225018.png]]
+![diagram](/assets/images/Pasted image 20260325225018.png)
 the following gives us a count of the total number of bytes read
-![[Pasted image 20260325225111.png]]
+![diagram](/assets/images/Pasted image 20260325225111.png)
 which are `13`.  and here i again get the same tag back:
-![[Pasted image 20260325225158.png]]
+![diagram](/assets/images/Pasted image 20260325225158.png)
 
 If we take a look at our heads and tails:
 Our kernel consumed up till here
-![[Pasted image 20260325225224.png]]
+![diagram](/assets/images/Pasted image 20260325225224.png)
 and the kernel sees up till here
-![[Pasted image 20260325225242.png]]
+![diagram](/assets/images/Pasted image 20260325225242.png)
 we consumed up till here
-![[Pasted image 20260325225313.png]]
+![diagram](/assets/images/Pasted image 20260325225313.png)
 and the kernel wrote up till here
-![[Pasted image 20260325225330.png]]
+![diagram](/assets/images/Pasted image 20260325225330.png)
 and here comes our actual data!
-![[Pasted image 20260325225404.png]]
+![diagram](/assets/images/Pasted image 20260325225404.png)
 
 in `io_uring_cqe_seen` we mark the `cqe` as consumed. 
 note that we pass the ring object and our `cqe` as arguments:
-![[Pasted image 20260325225553.png]]
+![diagram](/assets/images/Pasted image 20260325225553.png)
 if we dissect it open:
 ```cpp
 IOURINGINLINE void io_uring_cqe_seen(struct io_uring *ring, struct io_uring_cqe *cqe)
@@ -853,9 +855,9 @@ io_uring_cq_advance(ring, io_uring_cqe_nr(cqe));
 }
 ```
 and since our `cqe` does exist
-![[Pasted image 20260325225747.png]]
+![diagram](/assets/images/Pasted image 20260325225747.png)
 we trigger `io_uring_cq_advance` with these arguments:
-![[Pasted image 20260325225948.png]]
+![diagram](/assets/images/Pasted image 20260325225948.png)
 ```cpp
 IOURINGINLINE void io_uring_cq_advance(struct io_uring *ring, unsigned nr)
 LIBURING_NOEXCEPT
