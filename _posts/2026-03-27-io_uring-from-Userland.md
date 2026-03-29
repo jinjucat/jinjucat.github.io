@@ -151,7 +151,7 @@ static inline int __sys_io_uring_setup(unsigned int entries, struct io_uring_par
 ![diagram](/assets/images/Pasted image 20260327214453.png)
 
 We aren't going to go into the details of the system call for now since that will probably covered in future posts. Moving on, we backtrack to `__io_uring_queue_init_params`  and check the file descriptor returned to us by `__sys_io_uring_setup` since we did
-```cpp title=__io_uring_queue_init_params
+```cpp 
 fd = __sys_io_uring_setup(entries, p);
 ```
 
@@ -194,7 +194,9 @@ if (!(p->flags & IORING_SETUP_NO_MMAP)) {
 ```
 
 Here the kernel allocated the ring memory itself. But that memory lives in kernel space. To actually use it from your application, which is in userspace, we need to map it into our process's address space, and that's what `mmap` does. `io_uring_queue_mmap` uses the `fd` to ask the kernel "let me see the ring memory you allocated." 
+
 ![diagram](/assets/images/Pasted image 20260327222915.png)
+
 now we have the following mates populated.
 
 ![diagram](/assets/images/Pasted image 20260327221814.png)
@@ -434,7 +436,9 @@ They are faster to look up but cannot be used like normal fds in all situations.
 - `INT_FLAG_REG_REG_RING` --> "the registered fd was registered by the setup process itself, not manually by the user"
 and we do some other checks. 
 then we return our already zeroed out `ret` back to `io_uring_queue_init_try_nosqarr`, then back to `io_uring_queue_init_params` and then return it to `io_uring_queue_init`, which returns it to our `main` function which isn't getting saved anywhere. This is how the struct gets prepared. pretty... twisty. 
+
 ![diagram](/assets/images/Pasted image 20260328163535.png)
+
 We then continue to `io_uring_get_sqe`, which takes us to `_io_uring_get_sqe`. Because `io_uring_prep_read` needs somewhere to write the operation details into. Think of it this way, that the SQE is a form. `io_uring_get_sqe` hands us a blank form. `io_uring_prep_read` fills it out. 
 ```cpp
     struct io_uring_sqe *sqe = io_uring_get_sqe(&ring);
@@ -444,6 +448,7 @@ We then continue to `io_uring_get_sqe`, which takes us to `_io_uring_get_sqe`. B
  ```cpp
  return _io_uring_get_sqe(ring);
  ```
+
 ![diagram](/assets/images/Pasted image 20260328165659.png)
 
 ### The two pointers that matter
@@ -456,7 +461,7 @@ The ring operates like a circular queue tracked by two numbers:
 - **`head`** is where the kernel is currently consuming from. The kernel advances this as it picks up and processes our submissions. 
 - **`tail`** is where we are currently producing to. We advance this every time you add a new SQE. We own this.
 
-![diagram](/assets/images/anusf.gif|800)
+![diagram](/assets/images/anusf.gif)
 
 The number of SQEs currently in flight which are submitted but not yet consumed by the kernel is always `tail - head`.
 ```c
@@ -665,7 +670,9 @@ return IO_URING_READ_ONCE(*ring->sq.kflags) & (IORING_SQ_CQ_OVERFLOW | IORING_SQ
 ![diagram](/assets/images/Pasted image 20260328174342.png)
 
 recall that we never set `IORING_SQ_TASKRUN` and `IORING_SQ_CQ_OVERFLOW`. Checking it in GDB:
+
 ![diagram](/assets/images/Pasted image 20260325193833.png)
+
 so we'll return false from `cq_ring_needs_flush` and `cq_ring_needs_enter` will return:
 ```cpp
 return (0 || 0);
@@ -858,7 +865,7 @@ Both loaded with acquire semantics. Remember from our ring setup:
 - `ktail` which is owned by the kernel. It advances every time the kernel drops a new completion into the ring.
 - `khead` is owned by us. It advances every time we consume a completion.
 
-![diagram](/assets/images/anutl.gif|700)
+![diagram](/assets/images/anutl.gif)
 
 We then check if anything is available:
 ```c
@@ -1013,6 +1020,6 @@ after:  *cq->khead = 1, *cq->ktail = 1   ← ring empty, slot free
 `khead == ktail` means the `CQ` ring is completely empty and all `64` slots are available for the kernel to write new completions into.
 and now if we see `khead`:
 
-![[Pasted image 20260325230634.png]]
+![diagram](/assets/images/Pasted image 20260325230634.png)
 
 so its `0x1`...
