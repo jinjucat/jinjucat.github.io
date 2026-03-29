@@ -896,7 +896,7 @@ Hand back the `CQE` pointer and how many completions were available. If `cqe` is
 
 From a very high overview, we have the following picture right now:
 
-![diagram](/assets/images/Pasted image 20260328213722.png)
+![diagram](/assets/images/highoverview.png)
 
 Now if we put it all together....
 
