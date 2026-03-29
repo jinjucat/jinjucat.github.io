@@ -312,6 +312,7 @@ We will shortly be discussing `io_uring_setup_ring_pointers` since it's going to
 Now our struct `io_uring_sq` is populated. similarly,
 
 ![diagram](/assets/images/Pasted image 20260324012649.png)
+
 We also return from `io_uring_queue_mmap`.
 After this call, our process can read and write the SQ and CQ rings directly as if they were just normal arrays in our RAM. If that mapping fails, the `fd` is closed and the error is returned. We are going to have many pointers both from userland and kernel land pointing at our memory, but for understanding purposes, if we take an example of how SQEs exist in memory:
 
@@ -369,7 +370,7 @@ After `mmap` completes, our process has a raw blob of shared memory. It knows th
 
 This function's entire job is to **calculate the address of every important field** inside that blob and store those addresses so the rest of the library can just do `*sq->khead` instead of doing pointer arithmetic every single time. Think of it like receiving a moving box full of items with no labels. This function opens the box, finds every item, and sticks a label on each one so you can grab anything instantly later.
 
-![diagram](/assets/images/Pasted image 20260328003511.png|center|600)
+![diagram](/assets/images/Pasted image 20260328003511.png)
 
 Note that every single line follows the same formula:
 ```c
@@ -429,7 +430,7 @@ Since `IORING_SETUP_REGISTERED_FD_ONLY`  was never set, we also don't take this 
 
 In `IORING_SETUP_REGISTERED_FD_ONLY` mode, the ring was set up with a **registered file descriptor** instead of a normal one. Registered file descriptors are stored in the kernel's own table rather than our process's file descriptor table. From a very high level `struct io_rsrc_data` is used to keep metadata about a set of registered resources and track their reference count etc, `tags` is a 2D array of tags or identifiers and `struct io_ring_ctx`is a pointer to the `io_uring` context which ties the resource data to a specific `io_uring` instance. An object of `io_ring_ctx` holds the state of the ring.
 
-![diagram](/assets/images/Pasted image 20260328164528.png|center|300)
+![diagram](/assets/images/Pasted image 20260328164528.png)
 
 They are faster to look up but cannot be used like normal fds in all situations. So `ring->ring_fd` is set to `-1` meaning  that "there is no normal fd for this ring" and two internal flags are set:
 - `INT_FLAG_REG_RING` --> "this ring uses a registered fd"
@@ -471,7 +472,7 @@ if (tail - head >= sq->ring_entries)
 
 If the distance between tail and head has reached the ring's total capacity, every slot is occupied and there is nowhere to put a new SQE in, so we return NULL. 
 
-![diagram](/assets/images/Pasted image 20260328171520.png|600)
+![diagram](/assets/images/Pasted image 20260328171520.png)
 
 The caller must wait for the kernel to consume some entries before submitting more. Now lets find the actual slot:
 ```c
