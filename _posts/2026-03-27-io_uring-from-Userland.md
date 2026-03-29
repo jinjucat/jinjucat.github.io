@@ -1022,3 +1022,5 @@ and now if we see `khead`:
 ![diagram](/assets/images/Pasted image 20260325230634.png)
 
 so its `0x1`...
+
+and that is it for now.
