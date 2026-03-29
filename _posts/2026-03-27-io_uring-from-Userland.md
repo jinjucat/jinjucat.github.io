@@ -48,6 +48,7 @@ We first call `io_uring_queue_init` with the following arguments:
 
 ![diagram](/assets/images/Pasted image 20260323192138.png) 
 
+
 where `0x7fffffffcd30` is the address of our `io_uring` object `ring`. We then call `io_uring_queue_init`.
 ```cpp
 int io_uring_queue_init(unsigned entries, struct io_uring *ring, unsigned flags)
