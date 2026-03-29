@@ -316,7 +316,7 @@ Now our struct `io_uring_sq` is populated. similarly,
 We also return from `io_uring_queue_mmap`.
 After this call, our process can read and write the SQ and CQ rings directly as if they were just normal arrays in our RAM. If that mapping fails, the `fd` is closed and the error is returned. We are going to have many pointers both from userland and kernel land pointing at our memory, but for understanding purposes, if we take an example of how SQEs exist in memory:
 
-![diagram](/assets/images/Pasted image 20260327225026.png|600)
+![diagram](/assets/images/Pasted image 20260327225026.png)
 
 and so does the rest exist in memory.
 
@@ -370,7 +370,7 @@ After `mmap` completes, our process has a raw blob of shared memory. It knows th
 
 This function's entire job is to **calculate the address of every important field** inside that blob and store those addresses so the rest of the library can just do `*sq->khead` instead of doing pointer arithmetic every single time. Think of it like receiving a moving box full of items with no labels. This function opens the box, finds every item, and sticks a label on each one so you can grab anything instantly later.
 
-![diagram](/assets/images/Pasted image 20260328003511.png)
+![diagram](/assets/images/Pasted image 20260328003511.png){: style="display:block; margin:auto;" }
 
 Note that every single line follows the same formula:
 ```c
@@ -430,7 +430,7 @@ Since `IORING_SETUP_REGISTERED_FD_ONLY`  was never set, we also don't take this 
 
 In `IORING_SETUP_REGISTERED_FD_ONLY` mode, the ring was set up with a **registered file descriptor** instead of a normal one. Registered file descriptors are stored in the kernel's own table rather than our process's file descriptor table. From a very high level `struct io_rsrc_data` is used to keep metadata about a set of registered resources and track their reference count etc, `tags` is a 2D array of tags or identifiers and `struct io_ring_ctx`is a pointer to the `io_uring` context which ties the resource data to a specific `io_uring` instance. An object of `io_ring_ctx` holds the state of the ring.
 
-![diagram](/assets/images/Pasted image 20260328164528.png)
+![diagram](/assets/images/Pasted image 20260328164528.png){: style="display:block; margin:auto;" }
 
 They are faster to look up but cannot be used like normal fds in all situations. So `ring->ring_fd` is set to `-1` meaning  that "there is no normal fd for this ring" and two internal flags are set:
 - `INT_FLAG_REG_RING` --> "this ring uses a registered fd"
@@ -462,7 +462,7 @@ The ring operates like a circular queue tracked by two numbers:
 - **`head`** is where the kernel is currently consuming from. The kernel advances this as it picks up and processes our submissions. 
 - **`tail`** is where we are currently producing to. We advance this every time you add a new SQE. We own this.
 
-![diagram](/assets/images/anusf.gif)
+![diagram](/assets/images/anusf.gif){: style="display:block; margin:auto;" }
 
 The number of SQEs currently in flight which are submitted but not yet consumed by the kernel is always `tail - head`.
 ```c
@@ -472,7 +472,7 @@ if (tail - head >= sq->ring_entries)
 
 If the distance between tail and head has reached the ring's total capacity, every slot is occupied and there is nowhere to put a new SQE in, so we return NULL. 
 
-![diagram](/assets/images/Pasted image 20260328171520.png)
+![diagram](/assets/images/Pasted image 20260328171520.png){: style="display:block; margin:auto;" }
 
 The caller must wait for the kernel to consume some entries before submitting more. Now lets find the actual slot:
 ```c
@@ -524,11 +524,10 @@ We then return the same `sqe` back to our main function. moving on in our code..
 ```cpp
     io_uring_prep_read(sqe, fd, buf, sizeof(buf), 0);
 ```
-![diagram](/assets/images/Pasted image 20260328172753.png|400)
+![diagram](/assets/images/Pasted image 20260328172753.png){: style="display:block; margin:auto;" }
 
 lets take a look at the function parameter:
 ```cpp
-  
 IOURINGINLINE void io_uring_prep_read(struct io_uring_sqe *sqe, int fd,
 void *buf, unsigned nbytes, __u64 offset) LIBURING_NOEXCEPT
 {
@@ -572,8 +571,7 @@ int io_uring_submit(struct io_uring *ring)
 	return __io_uring_submit_and_wait(ring, 0);
 }
 ```
-where ring is of course our `io_uring` object, and 0 are our `wait_nr`. `wait_nr` is the number of completions we want to wait for before the call returns.
-- `wait_nr = 0` means submit and return immediately without waiting for anything. Fire and forget. We will collect completions later ourselves.
+where ring is of course our `io_uring` object, and 0 are our `wait_nr`. `wait_nr` is the number of completions we want to wait for before the call returns. `wait_nr = 0` means submit and return immediately without waiting for anything. Fire and forget. We will collect completions later ourselves.
 ```cpp
 static int __io_uring_submit_and_wait(struct io_uring *ring, unsigned wait_nr)
 {
@@ -739,7 +737,7 @@ __sys_io_uring_enter(ring->enter_ring_fd, submitted, wait_nr, flags, NULL);
 and hence we make a syscall, after ample checks of whether or not to make a syscall. After this syscall, we're going to wait for `cqes` via `io_uring_wait_cqe`. 
 
 In our main function we have:
-```cpp title=main.c
+```cpp 
     io_uring_wait_cqe(&ring, &cqe);
 ```
 with the arguments:
@@ -765,14 +763,14 @@ this time `wait_nr` is `0x1`, means we will block until we receive one completio
 ![diagram](/assets/images/Pasted image 20260328181423.png)
 
 This function's only job is to package up everything needed to wait for a completion and pass it down to the actual implementation. The parameters coming in are:
-**`ring`** which is the `io_uring` instance to wait on.
+- **`ring`** which is the `io_uring` instance to wait on.
 
-**`cqe_ptr`** which is a pointer to a pointer. When the function returns, this will point at the `CQE` that just completed which is our read result. This is how the completion event gets handed back to us.
+- **`cqe_ptr`** which is a pointer to a pointer. When the function returns, this will point at the `CQE` that just completed which is our read result. This is how the completion event gets handed back to us.
 
-**`submit`** which in our case this is `0x0`. We already submitted our `SQE` separately via `io_uring_submit`. We aren't submitting anything new here, just waiting.
+- **`submit`** which in our case this is `0x0`. We already submitted our `SQE` separately via `io_uring_submit`. We aren't submitting anything new here, just waiting.
 
-**`wait_nr`** is `0x1` which means that block until at least one completion.
-**`sigmask`** is `NULL` in our case. 
+- **`wait_nr`** is `0x1` which means that block until at least one completion.
+- **`sigmask`** is `NULL` in our case. 
 So now these get packed into `get_data`:
 ```c
 struct get_data data = {
@@ -866,7 +864,7 @@ Both loaded with acquire semantics. Remember from our ring setup:
 - `ktail` which is owned by the kernel. It advances every time the kernel drops a new completion into the ring.
 - `khead` is owned by us. It advances every time we consume a completion.
 
-![diagram](/assets/images/anutl.gif)
+![diagram](/assets/images/anutl.gif){: style="display:block; margin:auto;" }
 
 We then check if anything is available:
 ```c
@@ -914,10 +912,10 @@ Even if we do `p ring.sq.sqes[0]` in GDB, even that would give us the same thing
 
 ![diagram](/assets/images/Pasted image 20260325223603.png)
 
-`pad[0]` = `0x1f`  = `31`   which is the `ring_mask` (31 in binary = 00011111, used for wrapping)
-`pad[1]` = `0x20`  = `32`   are `ring_entries`. We have 32 `SQE` slots total
-`pad[2]` = `0x800` = `2048`  is `sqes_sz`, `32` slots × `64` bytes each = `2048` bytes
-`pad[3]` = `0x0`  is unused padding
+- `pad[0]` = `0x1f`  = `31`   which is the `ring_mask` (31 in binary = 00011111, used for wrapping)
+- `pad[1]` = `0x20`  = `32`   are `ring_entries`. We have 32 `SQE` slots total
+- `pad[2]` = `0x800` = `2048`  is `sqes_sz`, `32` slots × `64` bytes each = `2048` bytes
+- `pad[3]` = `0x0`  is unused padding
 
 one thing to observe is that...
 
