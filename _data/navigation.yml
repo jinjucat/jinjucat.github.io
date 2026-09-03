@@ -2,6 +2,6 @@ main:
   - title: "about"
     url: https://jinjucat.github.io/about
   - title: "blogs"
-    url: /
+    url: /blog/
   - title: "tutorials"
     url: /tutorials/
