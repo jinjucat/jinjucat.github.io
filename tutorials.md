@@ -7,5 +7,5 @@ author_profile: false
 
 Pick a topic:
 
-- [DLD](/tutorials/dld/)
+- [Digital Logic Design](/tutorials/dld/)
 - [Electronics](/tutorials/electronics/)
