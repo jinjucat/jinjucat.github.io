@@ -1,6 +1,7 @@
-# main links
 main:
   - title: "about"
-    url: "/about"
+    url: https://jinjucat.github.io/about
+  - title: "blogs"
+    url: /
   - title: "tutorials"
     url: /tutorials/
