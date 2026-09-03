@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "about"
+title:  "About Me"
 classes: wide
 ---
 Low level Researcher and Educator!
