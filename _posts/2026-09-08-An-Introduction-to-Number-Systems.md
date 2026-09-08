@@ -51,10 +51,13 @@ So binary isn't just a random choice, it's a direct consequence of the nature of
 
 In decimal, each position is worth 10× the one before it because we have 10 symbols (0–9) before we are forced to roll over into a new position. 
 ![diagram](/assets/images/Number_System_GIF_1.gif)
+
 In binary, we only have 2 symbols which are 0 and 1, so you roll over into a new position twice as fast, every 2 counts instead of every 10. 
 ![diagram](/assets/images/Number_System_GIF_2.gif)
+
 In binary the maximum number is 1, and the lowest 0 of course, so as soon as we hit the lowest that is 0, we go to the highest that is 1, when we hit the highest, we don't have anything higher so we turn around to the lowest that is 0! However, we don't just keep toggling around the numbers in the same place, once we encounter the highest possible number, we jump to the next position. It might sound confusing for now, but soon it will become crystal clear.`
 ![diagram](/assets/images/Screenshot from 2026-09-08 11-12-37.png)
+
 Start at position 0 (rightmost) with a value of 1. Each position to the left is worth **2× the position before it**, because that's how many counts it takes before that position needs to increment:
 ```
 2⁰ = 1
@@ -88,6 +91,7 @@ This is _exactly_ the same mechanic as decimal rolling from 9 to 10, or 99 to 10
 
 For example, if we have to make the number 7, we will tick the columns where the numbers when added together can make the number 7! We know the positions increase by a factor of 2^n. So,
 ![diagram](/assets/images/Screenshot from 2026-09-08 11-22-24.png)
+
 We see which columns or positions have 1's ticked in them. Here we have a 1 in 4's position, 2's position and 1's position, so we are going to add the positions. That is going to be 4+2+1 that is 7!
 ### Why `0010` equals 2
 Line the bits up under their position values and multiply, same as we did for decimal:
@@ -134,6 +138,7 @@ A single octal digit is really just a compact label for a group of 3 bits. And w
 
 There is no 3-bit pattern left over for "8" or "9" as 000 through 111 only has 8 combinations total, and they're all used up by 0–7. Now think about place value the same way. In decimal, moving one column to the left makes a digit worth 10× more, because decimal counts in groups of 10 and in binary moving one column to the left makes a digit worth 2x more, similarly in octal, moving one column to the left makes a digit worth 8× more, because octal counts in groups of 8. Lets take an example of the number 253. What if I told you the digits `2 5 3` weren't written in decimal at all and were written in **octal** instead? 
 ![diagram](/assets/images/Screenshot from 2026-09-08 11-32-53.png)
+
 The digits 2, 5, and 3 themselves haven't changed. But their _job_ has changed. We know that in octal columns aren't worth ones/tens/hundreds anymore. They're worth:
 
 - Right-most digit → **ones** (same as before)
@@ -169,6 +174,7 @@ Hexadecimal is a **base-16** number system. It needs **16 unique symbols**, but 
 
 So `A` isn't a letter in the alphabetic sense here but it's a single digit that stands for the quantity 10. Likewise `F` is a single digit standing for 15. Once you reach `F`, the next value rolls over to a new position that will be 0, just like binary rolling over after 1, octal rolling over after 7 and decimal rolling over after 9.
 ![diagram](/assets/images/Number_System_GIF_4.gif)
+
 (In the above GIF 0 has been missed out but it does exist.)
 ### Why 16 Symbols Are Needed
 We know that a base-N system needs N distinct symbols to represent every value from 0 up to N−1 before a carry happens. Base 16 needs 16 symbols and had to invent extra ones hence borrowing A–F from the alphabet. There's nothing special about using letters specifically. It is simply the most convenient set of extra single character symbols available.
@@ -243,9 +249,12 @@ Octal works the same way, except grouping in 3s, because 8 is exactly 2 to the p
 All what we have studied till now isn't just classroom material, you'll run into these constantly:
 - **Hex in memory addresses.** Every pointer or memory address you'll see in a debugger (like `0x7ffee420`) is hex, purely because it's a compact, exact way to write out a binary address without a 32- or 64-character sequence of 1s and 0s.
 ![diagram](/assets/images/Screenshot from 2026-09-08 12-01-45.png)
+
 - **Hex in color codes.** A web color like `#FF5733` is three hex bytes one each for red, green, blue intensity, 0–255 each.
  ![diagram](/assets/images/Screenshot from 2026-09-08 12-02-49.png)
+
 - **Octal in Unix permissions.**  Chmod in Linux is used to change file permissions.`chmod 755` is octal. Each digit (7, 5, 5) is exactly 3 bits representing read, write and execute permissions for owners, groups and others. 
 
 ![diagram](/assets/images/Screenshot from 2026-09-08 12-04-40.png)
+
 You can see how chmod asks for an OCTAL-MODE for permissions. 
