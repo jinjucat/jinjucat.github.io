@@ -177,8 +177,7 @@ We know that a base-N system needs N distinct symbols to represent every value f
 Hex places are powers of 16:
 
 | Position (from right)       | 4th  | 3rd | 2nd | 1st |
-| --------------------------- | ---- | --- | --- | --- |
-| Power of 16                 | 16³  | 16² | 16¹ | 16⁰ |
+|---|---|---|---|---|| Power of 16                 | 16³  | 16² | 16¹ | 16⁰ |
 | Decimal value of that place | 4096 | 256 | 16  | 1   |
 
 The core idea  is that every hex digit is just a nickname for a group of 4 bits (a "nibble"). There are 16 possible patterns you can make with 4 bits (0000 through 1111).
