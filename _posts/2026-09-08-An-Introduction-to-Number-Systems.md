@@ -7,6 +7,7 @@ tags:
   - Digital Logic Design
   - dld
   - Hardware
+categories: dld
 ---
 
 Welcome to the first lecture in this Digital Logic Design series. Before we touch a single logic gate, flip-flop, or circuit, we need to get comfortable with something that sits underneath all this, and that is how computers represent numbers!
