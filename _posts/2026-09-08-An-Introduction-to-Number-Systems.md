@@ -5,7 +5,7 @@ date: 2026-09-08
 classes: wide
 tags:
   - Digital Logic Design
-  - DLD
+  - dld
   - Hardware
 ---
 
