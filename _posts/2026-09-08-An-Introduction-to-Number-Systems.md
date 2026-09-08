@@ -176,31 +176,32 @@ We know that a base-N system needs N distinct symbols to represent every value f
 ### Positional Structure
 Hex places are powers of 16:
 
-| Position (from right)       | 4th  | 3rd | 2nd | 1st |
-| --------------------------- | ---- | --- | --- | --- |
-| Power of 16                 | 16³  | 16² | 16¹ | 16⁰ |
-| Decimal value of that place | 4096 | 256 | 16  | 1   |
+| Position (from right) | 4th | 3rd | 2nd | 1st |
+|---|---|---|---|---|
+| Power of 16 | 16³ | 16² | 16¹ | 16⁰ |
+| Decimal value of that place | 4096 | 256 | 16 | 1 |
 The core idea  is that every hex digit is just a nickname for a group of 4 bits (a "nibble"). There are 16 possible patterns you can make with 4 bits (0000 through 1111).
 
 
-| Hex digit | 8   | 4   | 2   | 1   | Sum |
-| --------- | --- | --- | --- | --- | --- |
-| 0         | 0   | 0   | 0   | 0   | 0   |
-| 1         | 0   | 0   | 0   | 1   | 1   |
-| 2         | 0   | 0   | 1   | 0   | 2   |
-| 3         | 0   | 0   | 1   | 1   | 3   |
-| 4         | 0   | 1   | 0   | 0   | 4   |
-| 5         | 0   | 1   | 0   | 1   | 5   |
-| 6         | 0   | 1   | 1   | 0   | 6   |
-| 7         | 0   | 1   | 1   | 1   | 7   |
-| 8         | 1   | 0   | 0   | 0   | 8   |
-| 9         | 1   | 0   | 0   | 1   | 9   |
-| A         | 1   | 0   | 1   | 0   | 10  |
-| B         | 1   | 0   | 1   | 1   | 11  |
-| C         | 1   | 1   | 0   | 0   | 12  |
-| D         | 1   | 1   | 0   | 1   | 13  |
-| E         | 1   | 1   | 1   | 0   | 14  |
-| F         | 1   | 1   | 1   | 1   | 15  |
+| Hex digit | 8 | 4 | 2 | 1 | Sum |
+|---|---|---|---|---|---|
+| 0 | 0 | 0 | 0 | 0 | 0 |
+| 1 | 0 | 0 | 0 | 1 | 1 |
+| 2 | 0 | 0 | 1 | 0 | 2 |
+| 3 | 0 | 0 | 1 | 1 | 3 |
+| 4 | 0 | 1 | 0 | 0 | 4 |
+| 5 | 0 | 1 | 0 | 1 | 5 |
+| 6 | 0 | 1 | 1 | 0 | 6 |
+| 7 | 0 | 1 | 1 | 1 | 7 |
+| 8 | 1 | 0 | 0 | 0 | 8 |
+| 9 | 1 | 0 | 0 | 1 | 9 |
+| A | 1 | 0 | 1 | 0 | 10 |
+| B | 1 | 0 | 1 | 1 | 11 |
+| C | 1 | 1 | 0 | 0 | 12 |
+| D | 1 | 1 | 0 | 1 | 13 |
+| E | 1 | 1 | 1 | 0 | 14 |
+| F | 1 | 1 | 1 | 1 | 15 |
+
 Let's use the same three digits 2, 5, and 3, but now interpret them as **hexadecimal**. We know that in hexadecimal, each position is worth a power of 16, so:
 - Right-most digit → **ones** = 16⁰ = 1
 - Next digit → **sixteens** = 16¹ = 16
