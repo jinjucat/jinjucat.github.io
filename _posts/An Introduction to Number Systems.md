@@ -1,3 +1,14 @@
+---
+layout: single
+title:  "An Introduction to Number Systems"
+date: 2026-09-08
+classes: wide
+tags:
+  - Digital Logic Design
+  - DLD
+  - Hardware
+---
+
 Welcome to the first lecture in this Digital Logic Design series. Before we touch a single logic gate, flip-flop, or circuit, we need to get comfortable with something that sits underneath all this, and that is how computers represent numbers!
 
 Computers represent numbers using number systems, and this brings us to the question that what are number systems? 
