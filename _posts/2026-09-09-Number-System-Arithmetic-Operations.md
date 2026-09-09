@@ -15,7 +15,9 @@ Binary Addition and Subtraction seems to be a bit complex when done for the firs
 ## 1. First, Let's Remember How Decimal Works
 
 We know that when we count in decimal and hit a 10 and run out of single digits , we simply reset the current column (units column) to 0 and add 1 to the column on the left (the "tens" column). This "rolling over" behavior is called **carrying**, and it is the main concept we are going to need to understanding binary addition.
-![[Number_System_GIF_5.gif]]
+
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_5.gif)
+
 
 By now we know this very well that binary (base 2) works exactly the same way, except instead of 10 symbols (0–9), it only has a 0 and a 1. So when we are counting in binary and reach the point where we will need a 2, we are out of symbols, and have to carry, exactly like decimal rolling over from 9 to 10.
 
