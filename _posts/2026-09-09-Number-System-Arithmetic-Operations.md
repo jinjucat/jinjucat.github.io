@@ -123,6 +123,7 @@ Binary subtraction works in the same way as decimal subtraction. For a single co
 | 1   | 0   | 1     | No      |
 | 1   | 1   | 0     | No      |
 | 0   | 1   | 1     | **Yes** |
+
  All the cases are pretty straightforward as we have already encountered them in decimal subtraction. In the fourth case, we can't subtract 1 from 0 in that column alone, so we have to **borrow** from the next column to the left. When we borrow one unit from the next column, it's worth **2** in our current column, because each column is double the one to its right. So:
 
 **0 (borrow) becomes 2, and 2 - 1 = 1.**
