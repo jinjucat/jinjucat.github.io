@@ -134,7 +134,7 @@ That's the entire trick of binary subtraction.
 
 Let's work through it column by column. Remember, `10` in binary means the decimal value 2.
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_7 1.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_7.gif)
 
 **Ones column:** 0 - 1. We don't have enough here, so we borrow from the 2s column.
 
@@ -166,7 +166,7 @@ In our previous lecture we learnt that an Octal is base 8 which means it only ha
 
 Notice as soon as we hit decimal 8, octal ran out of symbols and rolled over to `10`, one "eight" and zero "ones."  
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_8 1.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_8.gif)
 
 ## 2. Place Value in Octal
 
@@ -185,7 +185,7 @@ When adding two octal digits, if the sum is 7 or less, just write it down as it 
 3. Carry a 1 to the next column to the left
 ### Example 1: 5 + 6 (in octal)
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_9 1.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_9.gif)
 
 5 + 6 = 11 in decimal terms. Since 11 is 8 or more, we can't write it directly:
 
