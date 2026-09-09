@@ -20,34 +20,51 @@ To convert a decimal number into binary, repeatedly divide by 2, and keep track 
 Every number can be written as a sum of powers of 2 and that is basically the whole idea behind place value in binary. Repeated division is just a mechanical way of peeling off those powers of 2, one bit at a time, starting with whether the number is even or odd (which tells you the last bit), then working up.
 
 Lets take an example of converting the decimal number 156 to binary.
-![[Screenshot from 2026-09-09 13-18-20 2.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-18-20 2.png)
+
 Now read the remainders **bottom to top**: `1 0 0 1 1 1 0 0`
 So **156 (decimal) = 10011100 (binary)**
 
 Let's verify using the place-value method (which we'll formally cover in section 1.2):
-![[Screenshot from 2026-09-09 13-27-48.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-27-48.png)
+
 128 + 16 + 8 + 4 = **156** which is correct.
 
 Lets take an example of the decimal number 27 and try to build intuition using it. What we know is that every number can be written as a sum of powers of 2, similarly the inverse should also exist, that we _can_ do ordinary division by 2 to get a number's binary equivalent. The question is why does the remainder of that repetitive ordinary division by 2 happen to equal the sequence of bits that makes our binary equivalent of our decimal number, which in this case is 27?
 
 Lets prove this by dividing the our number 27 repetitively by 2. 
-![[Screenshot from 2026-09-09 13-21-54.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-21-54.png)
+
 This can also be written as:
-![[Screenshot from 2026-09-09 13-22-41.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-22-41.png)
+
 Notice each row is in the following way:
-![[Screenshot from 2026-09-09 13-23-09.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-23-09.png)
+
 Now substitute each quotient with what it equals from the row below it, like we will substitute equation b in equation a's quotient. Equation 'a' will become:
-![[Screenshot from 2026-09-09 13-23-45.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-23-45.png)
+
 Replace `6` using the third equation (`6 = 2×3 + 0`):
-![[Screenshot from 2026-09-09 13-24-16.png]]
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-24-16.png)
+
 Replace `3` using the fourth equation (`3 = 2×1 + 1`):
-![[Screenshot from 2026-09-09 13-24-40.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-24-40.png)
 
 Replace `1` using the fifth equation (`1 = 2×0 + 1`):
-![[Screenshot from 2026-09-09 13-24-56 1.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-24-56 1.png)
 
 Notice how this is giving us a high bit 1 for some powers of 2 and giving us a low bit 0 for the rest. Lets drop the `32×0`  as its a leading 0 and hence won't matter and look at what's left:
-![[Screenshot from 2026-09-09 13-25-18.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-25-18.png)
+
 Look at the coefficients in that final line `1, 1, 0, 1, 1`. Those are exactly our five remainders and they landed in exact order against 16, 8, 4, 2, 1. Every time we substituted a quotient equation into the one above it, the remainder from that row got multiplied by one more factor of 2 (because it was sitting inside a `2×(...)`, pushing it one column to the left. The _last_ remainder found (from the row closest to 0) ends up multiplied by the _most_ factors of 2, landing in the highest column. The first remainder found ends up with zero extra factors of 2, landing in the ones column. This is a concept we will soon visit again!
 
 ## Binary to Decimal ("Weight" Method)
@@ -56,7 +73,8 @@ This is the reverse direction, and it's the method you already know from our ear
 
 As an example lets convert`10011100` to decimal:
 
-![[Screenshot from 2026-09-09 13-20-53.png]]
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-20-53.png)
+
 Add the columns with a 1 which give us 128 + 16 + 8 + 4 = **156**.
 
 This confirms our division result above. The two methods are exact mirror images of each other. Division peels off bits from the bottom, while place value expansion reconstructs the number by adding weighted columns.
@@ -67,45 +85,64 @@ Same intuition as decimal to binary, but now divide by 8 instead of 2, since oct
 
 Same substitution trick, we write each row as "dividend = 8×quotient + remainder":
 
-![[Screenshot from 2026-09-09 13-29-22.png]]
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-29-22.png)
+
 Now substitute upward, starting from the top:
-![[Screenshot from 2026-09-09 13-29-44.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-29-44.png)
 
 Replace `19` using the second equation (`19 = 8×2 + 3`):
-![[Screenshot from 2026-09-09 13-29-57 1.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-29-57 1.png)
 
 Distribute the 8 across both terms inside the parentheses:
-![[Screenshot from 2026-09-09 13-30-15.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-30-15.png)
 
 Replace `2` using the third equation (`2 = 8×0 + 2`):
-![[Screenshot from 2026-09-09 13-30-27.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-30-27.png)
+
 Now distribute the 64:
-![[Screenshot from 2026-09-09 13-30-44.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-30-44.png)
+
 You might be thinking why the BODMAS rule is not being followed here. It's because multiplication lets you regroup which pair you multiply first, and you'll always get the same answer. That's the associative law: `a×(b×c) = (a×b)×c`. Now drop the `512×0` term since its a leading zero:
-![[Screenshot from 2026-09-09 13-31-02.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-31-02.png)
 
 The coefficients 2, 3, 4 are our three remainders, in the exact order we found them, and will now sit against columns 64, 8, 1 which are exactly the powers of 8 (8², 8¹, 8⁰). So the answer is 234.
 
 ## Octal to Decimal (Place-Value Method)
 
 Again it is the same weight adding idea, but now the column headers are powers of 8 `..., 512, 64, 8, 1`. As an example lets convert `234` (octal) to decimal
-![[Screenshot from 2026-09-09 13-32-26.png]]
 
-![[Screenshot from 2026-09-09 13-33-00.png]]
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-32-26.png)
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-33-00.png)
+
 ## Decimal to Hex (Repeated Division by 16)
 
 Same trick of repetitive division but this time with base 16. Write each row as:
 dividend = 16×quotient + remainder:
-![[Screenshot from 2026-09-09 13-33-48.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-33-48.png)
 
 Only two rows this time, so there's just one substitution.
-![[Screenshot from 2026-09-09 13-34-02.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-02.png)
+
 Replace `9` using the second equation (`9 = 16×0 + 9`):
-![[Screenshot from 2026-09-09 13-34-13 1.png]]
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-13 1.png)
+
 Distribute the 16 across both terms inside the parentheses:
-![[Screenshot from 2026-09-09 13-34-30 1.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-30 1.png)
+
 Drop the `256×0` term (it's zero):
-![[Screenshot from 2026-09-09 13-34-44 1.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-44 1.png)
+
 Look at the coefficients 9 and 12. Those are our two remainders, in the exact order we found them, sitting against columns 16 and 1, with the powers of 16 (16¹, 16⁰). So our answer would be 0x9C.
 ## Hex to Decimal (Place Value Method)
 
@@ -113,9 +150,9 @@ Notice a pattern across the conversions above that every "into decimal" directio
 
 ### Example: Convert `9C` (hex) to decimal
 
-![[Screenshot from 2026-09-09 13-36-31.png]]
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-36-31.png)
 
-![[Screenshot from 2026-09-09 13-37-10.png]]
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-37-10.png)
 
 ## Starting From Binary
 
@@ -130,7 +167,7 @@ Since 8 = 2³, every group of exactly **3 bits** corresponds to exactly one octa
 As an example lets convert `10011100` (binary) to octal
 
 
-![[Number_System_GIF_15.gif]]
+![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_15.gif)
 
 Now convert each group using 4-2-1:
 
@@ -148,18 +185,22 @@ This is simply the reverse: take each octal digit and expand it into its 3-bit b
 - `3` → `011`
 - `4` → `100`
 
-Concatenate: them together`010 011 100` and drop the leading padding zero. 
-![[Number_System_GIF_16.gif]]
+Concatenate: them together`010 011 100` and drop the leading padding zero.
+
+![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_16.gif)
+
 Result: 10011100
 ## Binary to Hex (Group in 4s)
 
 Since 16 = 2⁴, every group of exactly **4 bits** (a "nibble") corresponds to exactly one hex digit. Same process as octal, just grouping by 4 instead of 3. As an example lets convert `10011100` (binary) to hex.
 
-![[Number_System_GIF_17.gif]]
+![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_17.gif)
+
 ## Hex to Binary (Expand Each Digit to 4 Bits)
 
 This time we will go in the reverse direction by expanding each hex digit into its 4-bit binary form and then later concatenate. As an example lets convert `9C` (hex) to binary.
-![[Number_System_GIF_18.gif]]
+![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_18.gif)
+
 - `9` → `1001`
 - `C` (12) → `1100`
 
@@ -193,7 +234,8 @@ Concatenated: `010011100`
 - `1100` = **C**
 
 Result: **9C (hex)**
-![[Number_System_GIF_19.gif]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_19.gif)
 
 We have seen that going through binary is necessary because 3-bit and 4-bit groupings don't line up neatly with each other, so binary acts as the common "translator" between octal and hex, the same way you might translate French to Spanish via English if you didn't speak both directly.
 
@@ -219,9 +261,9 @@ Concatenated: `10011100`
 
 Result: **234 (octal)**
 
-# PART 4: The Complete Picture
+## The Complete Picture
 
-## 4.1 Choosing the Right Method
+## Choosing the Right Method
 
 | Conversion Direction         | Best Method                                                       |
 | ---------------------------- | ----------------------------------------------------------------- |
@@ -231,7 +273,7 @@ Result: **234 (octal)**
 | /Binary ↔ Hex                | Group/expand in 4s                                                |
 | Octal ↔ Hex                  | Bridge through binary (no direct shortcut)                        |
 
-## 4.2 Quick Reference: Powers Used by Each Base
+## Powers Used by Each Base
 
 | Base         | Powers (right to left)           |
 | ------------ | -------------------------------- |
@@ -240,7 +282,7 @@ Result: **234 (octal)**
 | Decimal (10) | 1, 10, 100, 1000, ...            |
 | Hex (16)     | 1, 16, 256, 4096, ...            |
 
-## 6. Quick Recap for Your Students
+## Summary
 
 - There are really only **three techniques** in this entire post: repeated division (to leave decimal), place-value weighting (to return to decimal), and bit-grouping (to move directly between binary, octal, and hex).
 - **Decimal → any base:** divide repeatedly by that base (2, 8, or 16), and read the remainders bottom to top.
