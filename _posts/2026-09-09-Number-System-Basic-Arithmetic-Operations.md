@@ -84,7 +84,7 @@ Similarly if we try 1 + 1 + 1 + 1. We know 1 + 1 + 1 = `11` (which is 3). Now ad
 
 Line up columns:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-47-01.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-50-17.png)
 
 **Step 1: Ones column:** 1 + 1 = two. No symbol for two, so write **0** and carry **1** to the 2s column.
 
