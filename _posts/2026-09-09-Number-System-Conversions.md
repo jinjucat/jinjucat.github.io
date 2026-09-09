@@ -2,7 +2,8 @@
 ## Introduction
 
 We are going to discuss a very important topic today that is Number system conversions. Before diving in, here's the map of everything we're about to cover:
-![[Screenshot from 2026-09-09 13-15-58.png]]
+
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-15-58.png)
 
 The three core techniques we will be using in this post are:
 
