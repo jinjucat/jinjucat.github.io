@@ -84,7 +84,7 @@ Similarly if we try 1 + 1 + 1 + 1. We know 1 + 1 + 1 = `11` (which is 3). Now ad
 
 Line up columns:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-50-17 1.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-47-01.png)
 
 **Step 1: Ones column:** 1 + 1 = two. No symbol for two, so write **0** and carry **1** to the 2s column.
 
@@ -96,7 +96,7 @@ Line up columns:
 
 Putting it all together:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-52-40 1.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-52-40.png)
 
 Result: **`100`**
 
@@ -114,6 +114,7 @@ When we have a third number to add into a column (like a carry-in from the previ
 | A   | B   | Carry-in | Sum | Carry-out |
 | --- | --- | -------- | --- | --------- |
 | 1   | 1   | 1        | 1   | 1         |
+
 ## Binary Subtraction
 Binary subtraction works in the same way as decimal subtraction. For a single column, there are four cases:
 
@@ -172,7 +173,7 @@ Notice as soon as we hit decimal 8, octal ran out of symbols and rolled over to 
 
 We now also know that just like decimal columns are powers of 10, and binary columns are powers of 2, octal columns are powers of 8:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 11-03-55 1.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 11-13-57.png)
 
 This is the whole key to everything that follows, whenever a column's sum reaches 8 or more, it "overflows" its single digit and you carry because 8 is exactly the value of the next column over.
 
@@ -259,7 +260,7 @@ Result: `0x8A`
 Here we again follow the same borrowing idea as before, if the minuend is smaller than the subtrahend, borrow 1 from the next column left. That borrowed 1 is worth **16** in the current column. 
 ### Example 1: 12 - 7 (in hex)
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_14.gif])
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_14.gif)
 
 **Ones column:** 2 - 7 is clearly not enough, so we borrow from the 16s column.
 - The 16s column's 1 becomes 0.
