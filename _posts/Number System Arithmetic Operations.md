@@ -1,3 +1,14 @@
+---
+layout: single
+title:  "Number Systems Arithmetic Operations"
+date: 2026-09-09
+classes: wide
+tags:
+  - Digital Logic Design
+  - dld
+  - Hardware
+categories: dld
+---
 Arithmetic Operations in Number Systems is a very important topic as we will often come across different number system operations during our learning journey. We are already deeply familiar with Decimal arithmetic operations, but now lets familiarize ourselves with arithmetic operations involving Binary, Octal and Hexadecimal.
 ## Binary
 Binary Addition and Subtraction seems to be a bit complex when done for the first time, but all you have to do is build intuition, and once that is done the arithmetic operations involving the remaining two number systems also gets really easy to understand. This post will build that intuition using the same logic you already know from everyday decimal math.
