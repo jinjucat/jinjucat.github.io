@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "Signed Magnitude, One's Complement, and Two's Complement"
+title:  "Signed Numbers Representation"
 date: 2026-09-10
 classes: wide
 tags:
@@ -12,9 +12,11 @@ categories: dld
 So far we've only added and subtracted positive numbers. But computers don't just work with positive numbers, they need a way to represent negative numbers too, using nothing but 0s and 1s. Today we look at the three classic ways to do that which are Signed Magnitude, One's Complement, and Two's Complement, and understand why hardware designers ultimately settled on the last one. 
 
 In all three representations, we agree on one convention up front that the **leftmost bit** (the Most Significant Bit, or MSB) is reserved to tell us the sign of the number.
-- MSB = `0` → the number is positive
+- MSB = `0` → the number is positive 
 - MSB = `1` → the number is negative
-![[Screenshot from 2026-09-10 08-44-32 1.png]]
+- 
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 08-44-32.png)
+
 So if we're working with 8-bit numbers, we no longer get to use all 8 bits for magnitude as one bit is spent just announcing the sign, and the remaining 7 bits represent the actual value. That's the one idea all three schemes share. Where they differ is how the remaining bits represent negative values.
 
 ## Signed Magnitude
@@ -42,30 +44,43 @@ Mathematically, `+0` and `-0` are the same value, but the hardware now sees two 
 **Problem 2: Incorrect Addition Results
 
 With unsigned binary, we could just add column by column and be done. With Signed Magnitude, we can't. Try adding `+5` and `-3`:
-![[Screenshot from 2026-09-10 12-19-18.png]]
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 12-19-18.png)
+
 If we just add these like ordinary binary numbers, we get `1000 1000`, which reads as `-8` in Signed Magnitude. But `5 + (-3)` should be `+2`, not `-8`! The hardware would first need to compare the signs, figure out which number is bigger, subtract the smaller magnitude from the larger, and then decide the sign of the result separately. That's an entire decision tree of extra logic just to add two numbers which is exactly the kind of complexity we want to avoid in circuit design.
 ## One's Complement
 
 Signed Magnitude failed on addition because the sign bit and the magnitude bits don't cooperate. One's Complement fixes this with a completely different way to build the negative version of a number and that is to flip every single bit, not just the sign bit.
 
 Before talking about negatives at all, look at what happens when we add any bit to its own flip:
-![[Screenshot from 2026-09-10 12-20-23.png]]
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 12-20-23.png)
 
 So a bit plus its own flip always equals 1. Now do this across a whole 8-bit number.
 Take `X = 0000 0101` (5) and flip every bit to get `1111 1010`, then add them:
-![[Number_System_GIF_20.gif]]
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Number_System_GIF_20.gif)
+
 Every column independently lands on `1`, so the total is invariably all 1s. This isn't special to `5` but it is true for any `X`, for the exact same column by column reason. That gives us one solid fact to build on which is true for any X:
 
-![[Screenshot from 2026-09-10 13-09-54.png]]
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 13-09-54.png)
 
 Say we want to compute `7 − 3`, but we're only allowed to add as no subtraction circuit exists. Rearranging the fact above for `X = 3` gives:
-![[Screenshot from 2026-09-10 13-12-56.png]]
- So instead of subtracting 3, try adding `flip(3)`:
-![[Screenshot from 2026-09-10 13-28-32.png]]
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 13-12-56.png)
+
+So instead of subtracting 3, try adding `flip(3)`:
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 13-28-32.png)
+
 Adding 7 (0000 0111) to 1111 1100:
-![[Screenshot from 2026-09-10 13-32-36.png]]
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 13-32-36.png)
+
 Notice the 9th bit. That carry out bit is exactly the leftover `1111 1111` spilling out of the 8-bit box. Drop it as it can't fit in 8 bits and add it back onto what remains. This step is called the **end-around carry**:
-![[Number_System_GIF_21 1.gif]]
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Number_System_GIF_21.gif)
+
 This gives us a 4 which is our answer for 7-3.
 ### So why does flipping bits count as "negative"?
 
@@ -90,21 +105,30 @@ Because `X + flip(X) = 1111 1111`, and One's Complement simply treats all 1s as 
 ## Two's Complement
 
 Recall where we left one's complement: `flip(X)` isn't the true negative, it is off by a fixed, constant amount (`1111 1111`) every single time. It is predictable, but we had to manually patch it after every addition (the end-around carry). Two's complement asks the question that if the error is always the exact same fixed amount, then why patch it after the fact and why not integrate the fix into the number itself before we ever add anything? So what it does is:
-![[Screenshot from 2026-09-10 13-55-14.png]]
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 13-55-14.png)
+
 Just add 1 directly to flip(X) when we create the negative number instead of waiting to add it back in after every single addition. Lets revisit the 5+(-3) example but this time with two's complement.
-![[Number_System_GIF_22.gif]]
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Number_System_GIF_22.gif)
 
 So the carry which pops out again we just throw it away. 
 
 To build a deeper intuition, we know that if we have a number 5, then that number is always 5 plus 0 on the number line.
-![[Screenshot from 2026-09-10 14-19-07.png]]
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 14-19-07.png)
+
 We know that a number's negative is what makes the  number 0 when added to it. If we come 5 plus the number line it gives us a 5, so if we go 5 back in the number line...
-![[Screenshot from 2026-09-10 14-24-04 1.png]]
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 14-24-04.png)
+
 then it should technically give us an 11.
-![[Screenshot from 2026-09-10 14-25-51.png]]
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 14-25-51.png)
 
 So if +5 on the number line gives 5 then if we add 11 to 5 that should give us a 0.
-![[Screenshot from 2026-09-10 14-30-00.png]]
+
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 14-30-00.png)
 
 This question might arise in your mind that why is it safe to just discard the carry this time, when one's complement needed it added back? Because the `+1` we baked in up front already _pre-paid_ the debt that carry represented. In one's complement the carry was telling us that we are still `1111 1111` short of true cancellation so we need to fix it. In two's complement, that shortfall was already covered when we added the `1` at creation time, so the carry now is just genuine overflow out of the register.
 
@@ -156,6 +180,6 @@ We don't always need to flip and add 1 to find out what a Two's Complement bit p
 
 Let's decode `1111 1011`:
 
-![[Screenshot from 2026-09-10 14-37-12.png]]
+![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 14-37-12.png)
 
 That matches the `-5` we computed earlier by flipping and adding 1. Same answer, different route. This place value trick is often faster once it clicks, since it skips the flip and add 1 step entirely.
