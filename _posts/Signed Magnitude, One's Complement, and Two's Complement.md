@@ -1,3 +1,14 @@
+---
+layout: single
+title:  "Signed Magnitude, One's Complement, and Two's Complement"
+date: 2026-09-10
+classes: wide
+tags:
+  - Digital Logic Design
+  - dld
+  - Hardware
+categories: dld
+---
 So far we've only added and subtracted positive numbers. But computers don't just work with positive numbers, they need a way to represent negative numbers too, using nothing but 0s and 1s. Today we look at the three classic ways to do that which are Signed Magnitude, One's Complement, and Two's Complement, and understand why hardware designers ultimately settled on the last one. 
 
 In all three representations, we agree on one convention up front that the **leftmost bit** (the Most Significant Bit, or MSB) is reserved to tell us the sign of the number.
