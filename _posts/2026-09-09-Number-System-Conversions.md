@@ -1,6 +1,14 @@
-
-## Introduction
-
+---
+layout: single
+title:  "Number Systems Conversions"
+date: 2026-09-09
+classes: wide
+tags:
+  - Digital Logic Design
+  - dld
+  - Hardware
+categories: dld
+---
 We are going to discuss a very important topic today that is Number system conversions. Before diving in, here's the map of everything we're about to cover:
 
 ![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-15-58.png)
