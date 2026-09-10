@@ -21,7 +21,7 @@ Every number can be written as a sum of powers of 2 and that is basically the wh
 
 Lets take an example of converting the decimal number 156 to binary.
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-18-20 2.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-18-20.png)
 
 Now read the remainders **bottom to top**: `1 0 0 1 1 1 0 0`
 So **156 (decimal) = 10011100 (binary)**
@@ -59,7 +59,7 @@ Replace `3` using the fourth equation (`3 = 2×1 + 1`):
 
 Replace `1` using the fifth equation (`1 = 2×0 + 1`):
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-24-56 1.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-24-56.png)
 
 Notice how this is giving us a high bit 1 for some powers of 2 and giving us a low bit 0 for the rest. Lets drop the `32×0`  as its a leading 0 and hence won't matter and look at what's left:
 
@@ -93,7 +93,7 @@ Now substitute upward, starting from the top:
 
 Replace `19` using the second equation (`19 = 8×2 + 3`):
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-29-57 1.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-29-57.png)
 
 Distribute the 8 across both terms inside the parentheses:
 
@@ -133,15 +133,15 @@ Only two rows this time, so there's just one substitution.
 ![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-02.png)
 
 Replace `9` using the second equation (`9 = 16×0 + 9`):
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-13 1.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-13.png)
 
 Distribute the 16 across both terms inside the parentheses:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-30 1.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-30.png)
 
 Drop the `256×0` term (it's zero):
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-44 1.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-44.png)
 
 Look at the coefficients 9 and 12. Those are our two remainders, in the exact order we found them, sitting against columns 16 and 1, with the powers of 16 (16¹, 16⁰). So our answer would be 0x9C.
 ## Hex to Decimal (Place Value Method)
