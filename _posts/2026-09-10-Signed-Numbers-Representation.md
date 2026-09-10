@@ -14,7 +14,7 @@ So far we've only added and subtracted positive numbers. But computers don't jus
 In all three representations, we agree on one convention up front that the **leftmost bit** (the Most Significant Bit, or MSB) is reserved to tell us the sign of the number.
 - MSB = `0` → the number is positive 
 - MSB = `1` → the number is negative
-- 
+ 
 ![diagram](/Tutorials/DLD/Signed_Number_Rep/Screenshot from 2026-09-10 08-44-32.png)
 
 So if we're working with 8-bit numbers, we no longer get to use all 8 bits for magnitude as one bit is spent just announcing the sign, and the remaining 7 bits represent the actual value. That's the one idea all three schemes share. Where they differ is how the remaining bits represent negative values.
@@ -28,6 +28,7 @@ This is the most intuitive one. Keep the magnitude which is the actual binary va
 | -5      | `1000 0101`      |
 | +18     | `0001 0010`      |
 | -18     | `1001 0010`      |
+
 Notice `+5` and `-5` share the exact same 7 magnitude bits (`000 0101`), the only thing that changed is that leading sign bit. 
 ### Limitations to Signed Magnitude
 Signed Magnitude has two problems that make it a poor fit for hardware:
@@ -41,7 +42,7 @@ Signed Magnitude has two problems that make it a poor fit for hardware:
 
 Mathematically, `+0` and `-0` are the same value, but the hardware now sees two different bit patterns for zero. That wastes a code and forces every comparison circuit to special case it.
 
-**Problem 2: Incorrect Addition Results
+Problem 2: Incorrect Addition Results
 
 With unsigned binary, we could just add column by column and be done. With Signed Magnitude, we can't. Try adding `+5` and `-3`:
 
