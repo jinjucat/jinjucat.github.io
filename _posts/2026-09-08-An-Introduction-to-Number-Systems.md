@@ -1,6 +1,7 @@
 ---
 layout: single
 title:  "An Introduction to Number Systems"
+categories: [Digital Logic Design]
 date: 2026-09-08
 classes: wide
 tags:
