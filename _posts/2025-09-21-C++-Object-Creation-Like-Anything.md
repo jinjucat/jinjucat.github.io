@@ -1,6 +1,7 @@
 ---
 layout: single
 title:  "C++ Object Creation Like Anything"
+categories: [C++ OOP Internals]
 date: 2025-09-21
 classes: wide
 tags:
