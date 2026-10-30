@@ -8,7 +8,6 @@ tags:
   - Digital Logic Design
   - dld
   - Hardware
-categories: dld
 ---
 Arithmetic Operations in Number Systems is a very important topic as we will often come across different number system operations during our learning journey. We are already deeply familiar with Decimal arithmetic operations, but now lets familiarize ourselves with the basic arithmetic operations involving Binary, Octal and Hexadecimal.
 ## Binary
