@@ -1,6 +1,7 @@
 ---
 layout: single
 title:  "io_uring from Userland"
+categories: [io_uring]
 date: 2026-03-27
 classes: wide
 tags:
