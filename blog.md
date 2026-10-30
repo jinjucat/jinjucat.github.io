@@ -1,6 +1,6 @@
 ---
 title: "Blogs"
-layout: posts
+layout: categories
 permalink: /blog/
 author_profile: false
 ---
