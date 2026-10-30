@@ -1,6 +1,7 @@
 ---
 layout: single
 title:  "Parents and Children in C++"
+categories: [C++ OOP Internals]
 date: 2025-09-25
 classes: wide
 tags:
