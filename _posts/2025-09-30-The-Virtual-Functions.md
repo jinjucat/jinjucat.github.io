@@ -1,6 +1,7 @@
 ---
 layout: single
 title:  "The Virtual Functions"
+categories: [C++ OOP Internals]
 date: 2025-09-30
 classes: wide
 tags:
