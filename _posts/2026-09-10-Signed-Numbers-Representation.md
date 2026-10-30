@@ -1,6 +1,7 @@
 ---
 layout: single
 title:  "Signed Numbers Representation"
+categories: [Digital Logic Design]
 date: 2026-09-10
 classes: wide
 tags:
