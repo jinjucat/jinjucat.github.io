@@ -1,6 +1,7 @@
 ---
 layout: single
 title:  "Number Systems Conversions"
+categories: [Digital Logic Design]
 date: 2026-09-09
 classes: wide
 tags:
