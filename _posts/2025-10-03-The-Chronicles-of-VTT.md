@@ -1,6 +1,7 @@
 ---
 layout: single
 title:  "The Chronicles of Virtual Table Table (a.k.a VTT)"
+categories: [C++ OOP Internals]
 date: 2025-10-03
 classes: wide
 tags:
