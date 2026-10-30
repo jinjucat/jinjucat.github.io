@@ -8,7 +8,6 @@ tags:
   - Digital Logic Design
   - dld
   - Hardware
-categories: dld
 ---
 We are going to discuss a very important topic today that is Number system conversions. Before diving in, here's the map of everything we're about to cover:
 
