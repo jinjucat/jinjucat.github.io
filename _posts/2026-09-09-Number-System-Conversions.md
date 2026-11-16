@@ -11,7 +11,7 @@ tags:
 ---
 We are going to discuss a very important topic today that is Number system conversions. Before diving in, here's the map of everything we're about to cover:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-15-58.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-15-58.webp){: loading="lazy" decoding="async" width="604" height="367" }
 
 The three core techniques we will be using in this post are:
 
@@ -29,14 +29,14 @@ Every number can be written as a sum of powers of 2 and that is basically the wh
 
 Lets take an example of converting the decimal number 156 to binary.
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-18-20.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-18-20.webp){: loading="lazy" decoding="async" width="388" height="397" }
 
 Now read the remainders **bottom to top**: `1 0 0 1 1 1 0 0`
 So **156 (decimal) = 10011100 (binary)**
 
 Let's verify using the place-value method (which we'll formally cover in section 1.2):
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-27-48.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-27-48.webp){: loading="lazy" decoding="async" width="564" height="118" }
 
 128 + 16 + 8 + 4 = **156** which is correct.
 
@@ -44,34 +44,34 @@ Lets take an example of the decimal number 27 and try to build intuition using i
 
 Lets prove this by dividing the our number 27 repetitively by 2. 
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-21-54.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-21-54.webp){: loading="lazy" decoding="async" width="322" height="362" }
 
 This can also be written as:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-22-41.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-22-41.webp){: loading="lazy" decoding="async" width="453" height="272" }
 
 Notice each row is in the following way:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-23-09.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-23-09.webp){: loading="lazy" decoding="async" width="490" height="76" }
 
 Now substitute each quotient with what it equals from the row below it, like we will substitute equation b in equation a's quotient. Equation 'a' will become:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-23-45.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-23-45.webp){: loading="lazy" decoding="async" width="850" height="189" }
 
 Replace `6` using the third equation (`6 = 2×3 + 0`):
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-24-16.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-24-16.webp){: loading="lazy" decoding="async" width="430" height="97" }
 
 Replace `3` using the fourth equation (`3 = 2×1 + 1`):
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-24-40.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-24-40.webp){: loading="lazy" decoding="async" width="591" height="94" }
 
 Replace `1` using the fifth equation (`1 = 2×0 + 1`):
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-24-56.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-24-56.webp){: loading="lazy" decoding="async" width="660" height="113" }
 
 Notice how this is giving us a high bit 1 for some powers of 2 and giving us a low bit 0 for the rest. Lets drop the `32×0`  as its a leading 0 and hence won't matter and look at what's left:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-25-18.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-25-18.webp){: loading="lazy" decoding="async" width="660" height="63" }
 
 Look at the coefficients in that final line `1, 1, 0, 1, 1`. Those are exactly our five remainders and they landed in exact order against 16, 8, 4, 2, 1. Every time we substituted a quotient equation into the one above it, the remainder from that row got multiplied by one more factor of 2 (because it was sitting inside a `2×(...)`, pushing it one column to the left. The _last_ remainder found (from the row closest to 0) ends up multiplied by the _most_ factors of 2, landing in the highest column. The first remainder found ends up with zero extra factors of 2, landing in the ones column. This is a concept we will soon visit again!
 
@@ -81,7 +81,7 @@ This is the reverse direction, and it's the method you already know from our ear
 
 As an example lets convert`10011100` to decimal:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-20-53.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-20-53.webp){: loading="lazy" decoding="async" width="533" height="119" }
 
 Add the columns with a 1 which give us 128 + 16 + 8 + 4 = **156**.
 
@@ -93,31 +93,31 @@ Same intuition as decimal to binary, but now divide by 8 instead of 2, since oct
 
 Same substitution trick, we write each row as "dividend = 8×quotient + remainder":
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-29-22.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-29-22.webp){: loading="lazy" decoding="async" width="471" height="144" }
 
 Now substitute upward, starting from the top:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-29-44.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-29-44.webp){: loading="lazy" decoding="async" width="297" height="50" }
 
 Replace `19` using the second equation (`19 = 8×2 + 3`):
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-29-57.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-29-57.webp){: loading="lazy" decoding="async" width="364" height="54" }
 
 Distribute the 8 across both terms inside the parentheses:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-30-15.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-30-15.webp){: loading="lazy" decoding="async" width="413" height="97" }
 
 Replace `2` using the third equation (`2 = 8×0 + 2`):
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-30-27.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-30-27.webp){: loading="lazy" decoding="async" width="469" height="57" }
 
 Now distribute the 64:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-30-44.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-30-44.webp){: loading="lazy" decoding="async" width="521" height="90" }
 
 You might be thinking why the BODMAS rule is not being followed here. It's because multiplication lets you regroup which pair you multiply first, and you'll always get the same answer. That's the associative law: `a×(b×c) = (a×b)×c`. Now drop the `512×0` term since its a leading zero:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-31-02.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-31-02.webp){: loading="lazy" decoding="async" width="359" height="47" }
 
 The coefficients 2, 3, 4 are our three remainders, in the exact order we found them, and will now sit against columns 64, 8, 1 which are exactly the powers of 8 (8², 8¹, 8⁰). So the answer is 234.
 
@@ -125,31 +125,31 @@ The coefficients 2, 3, 4 are our three remainders, in the exact order we found t
 
 Again it is the same weight adding idea, but now the column headers are powers of 8 `..., 512, 64, 8, 1`. As an example lets convert `234` (octal) to decimal
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-32-26.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-32-26.webp){: loading="lazy" decoding="async" width="276" height="112" }
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-33-00.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-33-00.webp){: loading="lazy" decoding="async" width="926" height="65" }
 
 ## Decimal to Hex (Repeated Division by 16)
 
 Same trick of repetitive division but this time with base 16. Write each row as:
 dividend = 16×quotient + remainder:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-33-48.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-33-48.webp){: loading="lazy" decoding="async" width="529" height="96" }
 
 Only two rows this time, so there's just one substitution.
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-02.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-02.webp){: loading="lazy" decoding="async" width="286" height="49" }
 
 Replace `9` using the second equation (`9 = 16×0 + 9`):
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-13.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-13.webp){: loading="lazy" decoding="async" width="430" height="60" }
 
 Distribute the 16 across both terms inside the parentheses:
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-30.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-30.webp){: loading="lazy" decoding="async" width="335" height="82" }
 
 Drop the `256×0` term (it's zero):
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-44.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-34-44.webp){: loading="lazy" decoding="async" width="334" height="60" }
 
 Look at the coefficients 9 and 12. Those are our two remainders, in the exact order we found them, sitting against columns 16 and 1, with the powers of 16 (16¹, 16⁰). So our answer would be 0x9C.
 ## Hex to Decimal (Place Value Method)
@@ -158,9 +158,9 @@ Notice a pattern across the conversions above that every "into decimal" directio
 
 ### Example: Convert `9C` (hex) to decimal
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-36-31.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-36-31.webp){: loading="lazy" decoding="async" width="274" height="95" }
 
-![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-37-10.png)
+![diagram](/Tutorials/DLD/Number_System_3/Screenshot from 2026-09-09 13-37-10.webp){: loading="lazy" decoding="async" width="466" height="109" }
 
 ## Starting From Binary
 
@@ -175,7 +175,7 @@ Since 8 = 2³, every group of exactly **3 bits** corresponds to exactly one octa
 As an example lets convert `10011100` (binary) to octal
 
 
-![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_15.gif)
+![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_15.gif){: loading="lazy" decoding="async" width="473" height="210" }
 
 Now convert each group using 4-2-1:
 
@@ -195,19 +195,19 @@ This is simply the reverse: take each octal digit and expand it into its 3-bit b
 
 Concatenate: them together`010 011 100` and drop the leading padding zero.
 
-![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_16.gif)
+![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_16.gif){: loading="lazy" decoding="async" width="500" height="322" }
 
 Result: 10011100
 ## Binary to Hex (Group in 4s)
 
 Since 16 = 2⁴, every group of exactly **4 bits** (a "nibble") corresponds to exactly one hex digit. Same process as octal, just grouping by 4 instead of 3. As an example lets convert `10011100` (binary) to hex.
 
-![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_17.gif)
+![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_17.gif){: loading="lazy" decoding="async" width="500" height="393" }
 
 ## Hex to Binary (Expand Each Digit to 4 Bits)
 
 This time we will go in the reverse direction by expanding each hex digit into its 4-bit binary form and then later concatenate. As an example lets convert `9C` (hex) to binary.
-![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_18.gif)
+![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_18.gif){: loading="lazy" decoding="async" width="500" height="343" }
 
 - `9` → `1001`
 - `C` (12) → `1100`
@@ -243,7 +243,7 @@ Concatenated: `010011100`
 
 Result: **9C (hex)**
 
-![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_19.gif)
+![diagram](/Tutorials/DLD/Number_System_3/Number_System_GIF_19.gif){: loading="lazy" decoding="async" width="500" height="402" }
 
 We have seen that going through binary is necessary because 3-bit and 4-bit groupings don't line up neatly with each other, so binary acts as the common "translator" between octal and hex, the same way you might translate French to Spanish via English if you didn't speak both directly.
 

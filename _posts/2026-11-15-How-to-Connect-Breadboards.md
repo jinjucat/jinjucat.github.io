@@ -20,18 +20,18 @@ One breadboard is often not enough for a bigger circuit. The good news is that b
 ### Step 1- Join the two breadboards
   Look at the sides of your breadboards. On one side you will see small tabs sticking **out**, and on the other side you will see slots going **in**. They are made to fit each other, just like puzzle pieces or building blocks.
 
-![diagram](/assets/images/HTCB/HTCB1.jpg)
+![diagram](/assets/images/HTCB/HTCB1.webp){: loading="lazy" decoding="async" width="1600" height="1200" }
 
 you are going to fit them together.
 
-![diagram](/assets/images/HTCB/HTCB2.jpg)
+![diagram](/assets/images/HTCB/HTCB2.webp){: loading="lazy" decoding="async" width="1200" height="1600" }
 
 ### Step 2- Share the power supply 
 Our first (top) breadboard already has the power supply connected to it. Joining the boards does **not** pass the power to the bottom one, so we connect the power rails with jumper wires. 
 1. Connect one jumper wire from the **ground** rail of the top breadboard to the **ground** rail of the bottom breadboard. 
 2. Connect the other jumper wire from the **HIGH supply (+5 V)** rail of the top breadboard to the **HIGH supply (+5 V)** rail of the bottom breadboard.
 
-![diagram](/assets/images/HTCB/HTCB3.jpg)
+![diagram](/assets/images/HTCB/HTCB3.webp){: loading="lazy" decoding="async" width="1239" height="1600" }
 
 Make sure ground goes to ground and HIGH goes to HIGH. If you cross them, your circuit will not work, and it can damage your components.
 
@@ -42,10 +42,10 @@ We can check that the power reached the bottom breadboard with a resistor and an
 3. In that same column, place the **longer leg** of the LED. 
 4. Connect the **shorter leg** of the LED to the ground rail of the bottom breadboard. If the LED lights up, the power supply is reaching the bottom breadboard, and your two breadboards are connected correctly.
 
-![diagram](/assets/images/HTCB/HTCB5.jpg)
+![diagram](/assets/images/HTCB/HTCB5.webp){: loading="lazy" decoding="async" width="1200" height="1600" }
 
 Lets take a cleaner look...
 
-![diagram](/assets/images/HTCB/HTCB6.jpg)
+![diagram](/assets/images/HTCB/HTCB6.webp){: loading="lazy" decoding="async" width="1600" height="1200" }
 
 This way you can get power supply between multiple breadboards!

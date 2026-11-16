@@ -116,7 +116,7 @@ retn
 
 it stores the contents inside `esi`, which is actually the value `int_Base` is initialized to on this constructor call, to the location where this pointer points to on the stack, and then it returns. Our `obj_D` currently looks like this:
 
-![diagram](/assets/images/Pasted image 20251001233050.png){: style="display:block; margin:auto; width:60%;" }
+![diagram](/assets/images/Pasted image 20251001233050.webp){: style="display:block; margin:auto; width:60%;" loading="lazy" decoding="async" width="610" height="343" }
 Recall that our `Base` class also had a member function `getVal()`, but it is not getting stored anywhere inside our object. This is because member functions live in the program’s code section, not in each object, so only data members are stored inside the object. Anyway lets return back to our `Derived` constructor now.
 
 ```cpp
@@ -131,7 +131,7 @@ mov     [rax+4], edx
 ```
 
 We now store the value of `int_Derived` inside our object, since `rax` is referencing it, but at an offset of `+0x04`. Why so? Well... that's because our `Base` class also has an integer data member `int_Base`, which is stored in our object before any data member of `Derived` is. Integer takes 4 bytes, and since there are no padding issues yet, so we simply skip those 4 already colonized bytes, and land at address `rax+4`, and this is where we store the newly set value of `int_Derived`, that is 1.
-![diagram](/assets/images/Pasted image 20251001233154.png){: style="display:block; margin:auto; width:60%;" }
+![diagram](/assets/images/Pasted image 20251001233154.webp){: style="display:block; margin:auto; width:60%;" loading="lazy" decoding="async" width="610" height="343" }
 
 ```cpp
 nop
@@ -170,37 +170,37 @@ on returning, we simply take the value in `eax`, and store it in our local varia
 ### Dynamic Analysis using GDB
 Lets start!
 
-![diagram](/assets/images/Pasted image 20250922022746.png)
+![diagram](/assets/images/Pasted image 20250922022746.webp){: loading="lazy" decoding="async" width="490" height="80" }
 
 At this instruction, we're retrieving our object's address, which is our this pointer. It's address is `0x7fffffffde30`. 
 
-![diagram](/assets/images/Pasted image 20250922022958.png)
+![diagram](/assets/images/Pasted image 20250922022958.webp){: loading="lazy" decoding="async" width="750" height="121" }
 
 We then set our registers with the correct parameters, and call our `Derived` Constructor. Note that `rdi` holds our the address of our object. 
 
-![diagram](/assets/images/Pasted image 20250922023318.png)
+![diagram](/assets/images/Pasted image 20250922023318.webp){: loading="lazy" decoding="async" width="387" height="60" }
 
 in our `Derived` constructor, we save our arguments on the stack.
 
-![diagram](/assets/images/Pasted image 20250922023436.png)next we set up our registers for a call to `Base(int)`.
+![diagram](/assets/images/Pasted image 20250922023436.webp){: loading="lazy" decoding="async" width="338" height="114" }next we set up our registers for a call to `Base(int)`.
 
-![diagram](/assets/images/Pasted image 20250922023558.png)
+![diagram](/assets/images/Pasted image 20250922023558.webp){: loading="lazy" decoding="async" width="867" height="109" }
 
 In `Base` constructor, we simply set our value of `int_Base` inside the object. lets analyze the memory contents after we are done with setting our value.
 
-![diagram](/assets/images/Pasted image 20250922023815.png)
+![diagram](/assets/images/Pasted image 20250922023815.webp){: loading="lazy" decoding="async" width="332" height="76" }
 
 We see, `0x2` is right at the start of our object. Once we return from `Base` constructor, now we can run our `Derived` constructor. Had there been any other class from which `Derived` inherited, we would've visited its constructor too as we'll soon see... but since there's not any, we'll let `Derived` continue with its execution, where it sets the value of its data member `int_Derived` at offset of `+0x04` from the address of our object `obj_D`. Lets see the memory layout after it's done:
 
-![diagram](/assets/images/Pasted image 20250922024108.png)
+![diagram](/assets/images/Pasted image 20250922024108.webp){: loading="lazy" decoding="async" width="328" height="65" }
 
 Eureka! Lets return to our main now...  
 
-![diagram](/assets/images/Pasted image 20250922024320.png)
+![diagram](/assets/images/Pasted image 20250922024320.webp){: loading="lazy" decoding="async" width="701" height="96" }
 
 We give a call to `Base::getVal()`, store the return value in `eax`, and save it in a local variable at `rbp-0x14`.
 
-![diagram](/assets/images/Pasted image 20250922024551.png)
+![diagram](/assets/images/Pasted image 20250922024551.webp){: loading="lazy" decoding="async" width="701" height="96" }
 
 ### When the compiler decides early
 In the above example, we had a simple case where we simply created a `Derived` class object on the stack... But what if we do something like...
@@ -253,9 +253,9 @@ Derived* d = new Derived(4,5);
 Base* b = d;   
 ```
 We're taking a `Derived` object and casting it up the inheritance hierarchy to be treated as a `Base` object.
-![diagram](/assets/images/Pasted image 20250923222959.png){: style="display:block; margin:auto; width:70%;" }
+![diagram](/assets/images/Pasted image 20250923222959.webp){: style="display:block; margin:auto; width:70%;" loading="lazy" decoding="async" width="659" height="263" }
 If we look at it from a memory perspective:
-![diagram](/assets/images/Pasted image 20250923223550.png){: style="display:block; margin:auto; width:70%;" }
+![diagram](/assets/images/Pasted image 20250923223550.webp){: style="display:block; margin:auto; width:70%;" loading="lazy" decoding="async" width="815" height="368" }
 
 To make invocations to `Derived`'s member functions possible even after doing so, we use virtual functions which are out of the scope of this discussion.
 ### When one parent just isn’t enough
@@ -298,7 +298,7 @@ call    Derived::Derived(int,int,int)
 
 side by side, we'll be seeing GDB too, so the parameters we have are:
 
-![diagram](/assets/images/Pasted image 20250922041058.png)
+![diagram](/assets/images/Pasted image 20250922041058.webp){: loading="lazy" decoding="async" width="794" height="146" }
 
 this shows that the address of our object is `0x7fffffffde3c`. In our `Derived` constructor, we first make a call to `Base1`'s constructor with appropriate parameters:
 
@@ -310,15 +310,15 @@ call    Base1::Base1(int)
 
 in GDB:
 
-![diagram](/assets/images/Pasted image 20250922041338.png)
+![diagram](/assets/images/Pasted image 20250922041338.webp){: loading="lazy" decoding="async" width="887" height="100" }
 
 In `Base1`'s constructor, we simply store the value 3 at offset 0 inside our object, giving us the intermediate object state as..
 
-![diagram](/assets/images/Pasted image 20250922041504.png)
+![diagram](/assets/images/Pasted image 20250922041504.webp){: loading="lazy" decoding="async" width="351" height="81" }
 
 till now, our object looks something like this...
 
-![diagram](/assets/images/Pasted image 20250923224331.png){: style="display:block; margin:auto; width:70%;" }
+![diagram](/assets/images/Pasted image 20250923224331.webp){: style="display:block; margin:auto; width:70%;" loading="lazy" decoding="async" width="815" height="368" }
 
 Once we return from `Base1` constructor, we call `Base2`'s constructor, but with a different this pointer value. 
 
@@ -332,15 +332,15 @@ call    Base2::Base2(int)
 ```
 
 `rax` gets initialized with the address of the object, that is the this pointer, we add `0x04` to it and load its address in `rdx`, and this address gets passed as the address of the object. 
-![diagram](/assets/images/Pasted image 20250922042007.png)
+![diagram](/assets/images/Pasted image 20250922042007.webp){: loading="lazy" decoding="async" width="899" height="94" }
 
 the actual address of our object is `0x7fffffffde3c`, and after addition of `0x04` it becomes `0x7fffffffde40`. 
 
-![diagram](/assets/images/Pasted image 20250923224759.png){: style="display:block; margin:auto; width:70%;" }
+![diagram](/assets/images/Pasted image 20250923224759.webp){: style="display:block; margin:auto; width:70%;" loading="lazy" decoding="async" width="886" height="418" }
 
 seeing this in GDB...
 
-![diagram](/assets/images/Pasted image 20250922043750.png)
+![diagram](/assets/images/Pasted image 20250922043750.webp){: loading="lazy" decoding="async" width="413" height="43" }
 
 Once we return from `Base2` constructor, we then store the value of `int_Derived` inside our object:
 
@@ -350,10 +350,10 @@ mov     edx, [rbp+var_C]
 mov     [rax+8], edx
 ```
 
-![diagram](/assets/images/Pasted image 20250923225510.png){: style="display:block; margin:auto; width:70%;" }
+![diagram](/assets/images/Pasted image 20250923225510.webp){: style="display:block; margin:auto; width:70%;" loading="lazy" decoding="async" width="886" height="333" }
 All three data members `int_Base1`, `int_Base2` and `int_Derived` have been stored inside the object `obj_D` now... 
 
-![diagram](/assets/images/Pasted image 20250922044154.png){: style="width:600px;" }
+![diagram](/assets/images/Pasted image 20250922044154.webp){: style="width:600px;" loading="lazy" decoding="async" width="540" height="44" }
 
 Then we return to main, check the stack canary, encounter our function epilogue, and that is pretty much it.
 

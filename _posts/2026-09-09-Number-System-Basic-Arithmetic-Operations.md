@@ -16,7 +16,7 @@ Binary Addition and Subtraction seems to be a bit complex when done for the firs
 
 We know that when we count in decimal and hit a 10 and run out of single digits , we simply reset the current column (units column) to 0 and add 1 to the column on the left (the "tens" column). This "rolling over" behavior is called **carrying**, and it is the main concept we are going to need to understanding binary addition.
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_5.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_5.gif){: loading="lazy" decoding="async" width="466" height="180" }
 
 
 By now we know this very well that binary (base 2) works exactly the same way, except instead of 10 symbols (0–9), it only has a 0 and a 1. So when we are counting in binary and reach the point where we will need a 2, we are out of symbols, and have to carry, exactly like decimal rolling over from 9 to 10.
@@ -37,11 +37,11 @@ Let's count in binary and watch it happen:
 
 Notice as soon as we hit 2 binary rolled over to `10`. In binary we know that each column represents a power of **2**:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 11-13-57.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 11-13-57.webp){: loading="lazy" decoding="async" width="416" height="98" }
 
 So the binary number `1 0 1` means: (1 × 4) + (0 × 2) + (1 × 1) = 5. Let's add using the "ones" column:
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_6.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_6.gif){: loading="lazy" decoding="async" width="500" height="259" }
 
 Here's the step-by-step logic for this operation:
 1. Add the ones column: 1 + 1 = 2 (as a quantity)
@@ -54,7 +54,7 @@ Result `10`which means (1 × 2) + (0 × 1) = 2.
 
 Let's build on what we just learned. We're adding three ones:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-43-56.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-43-56.webp){: loading="lazy" decoding="async" width="334" height="264" }
 
 Think of it as a running total, one 1 at a time:
 
@@ -65,11 +65,11 @@ Think of it as a running total, one 1 at a time:
 
 Now here's where it gets interesting. Let's add the third 1 to `10`:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-44-29.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-44-29.webp){: loading="lazy" decoding="async" width="334" height="264" }
 
 Line up the columns:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-47-01.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-47-01.webp){: loading="lazy" decoding="async" width="577" height="492" }
 
 - Ones column 0 + 1 = 1. No carrying needed here so write 1.
 - 2s column  just bring down the 1 (nothing added there).
@@ -80,15 +80,15 @@ So `1 + 1 + 1 = 11` in binary because 11 (binary) represents the quantity three,
 
 Similarly if we try 1 + 1 + 1 + 1. We know 1 + 1 + 1 = `11` (which is 3). Now add one more 1:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-49-47.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-49-47.webp){: loading="lazy" decoding="async" width="341" height="272" }
 
 Line up columns:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-50-17.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-50-17.webp){: loading="lazy" decoding="async" width="341" height="272" }
 
 **Step 1: Ones column:** 1 + 1 = two. No symbol for two, so write **0** and carry **1** to the 2s column.
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-51-29.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-51-29.webp){: loading="lazy" decoding="async" width="341" height="225" }
 
 **Step 2: In 2s column** we already had a 1 sitting there, and now we're adding the carried 1. So 1 + 1 = two again, but this time it's two **2s**, which equals one **4**. No symbol for two in this column either! So we write **0** here too, and carry a 1 into the next column (the 4s column). This is where a **double carry** shows up for the first time. 
 
@@ -96,7 +96,7 @@ Line up columns:
 
 Putting it all together:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-52-40.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 10-52-40.webp){: loading="lazy" decoding="async" width="341" height="225" }
 
 Result: **`100`**
 
@@ -135,7 +135,7 @@ That's the entire trick of binary subtraction.
 
 Let's work through it column by column. Remember, `10` in binary means the decimal value 2.
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_7.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_7.gif){: loading="lazy" decoding="async" width="492" height="394" }
 
 **Ones column:** 0 - 1. We don't have enough here, so we borrow from the 2s column.
 
@@ -167,13 +167,13 @@ In our previous lecture we learnt that an Octal is base 8 which means it only ha
 
 Notice as soon as we hit decimal 8, octal ran out of symbols and rolled over to `10`, one "eight" and zero "ones."  
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_8.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_8.gif){: loading="lazy" decoding="async" width="435" height="206" }
 
 ## 2. Place Value in Octal
 
 We now also know that just like decimal columns are powers of 10, and binary columns are powers of 2, octal columns are powers of 8:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 11-13-57.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 11-13-57.webp){: loading="lazy" decoding="async" width="416" height="98" }
 
 This is the whole key to everything that follows, whenever a column's sum reaches 8 or more, it "overflows" its single digit and you carry because 8 is exactly the value of the next column over.
 
@@ -186,7 +186,7 @@ When adding two octal digits, if the sum is 7 or less, just write it down as it 
 3. Carry a 1 to the next column to the left
 ### Example 1: 5 + 6 (in octal)
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_9.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_9.gif){: loading="lazy" decoding="async" width="500" height="311" }
 
 5 + 6 = 11 in decimal terms. Since 11 is 8 or more, we can't write it directly:
 
@@ -200,7 +200,7 @@ Subtraction is as simple as addition, but here we are borrowing instead of carry
 
 ### Example 1: 13 - 6 (in octal)
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_10.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_10.gif){: loading="lazy" decoding="async" width="500" height="308" }
 
 **Ones column:** 3 - 6. Not enough so borrow from the 8s column.
 
@@ -215,7 +215,7 @@ Now let's tackle base 16 which is **hexadecimal** which means it needs **sixteen
 
 Right at decimal 16, hex ran out of single digit symbols (F was the highest) and rolled over to `10` meaning "one sixteen and zero ones."
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_11.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_11.gif){: loading="lazy" decoding="async" width="427" height="198" }
 
 Exact same rollover behavior as every other base, just triggered at 16 instead of 10, 8, or 2!
 
@@ -223,7 +223,7 @@ Exact same rollover behavior as every other base, just triggered at 16 instead o
 
 Just as decimal columns are powers of 10, and octal columns are powers of 8, hex columns are **powers of 16**:
 
-![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 11-47-23.png)
+![diagram](/Tutorials/DLD/Number_System_2/Screenshot from 2026-09-09 11-47-23.webp){: loading="lazy" decoding="async" width="543" height="116" }
 
 So the hex number `2 A 5` means: (2 × 256) + (10 × 16) + (5 × 1) = 512 + 160 + 5 = 677 (decimal). Notice the `A` is actually 10. 
 
@@ -240,7 +240,7 @@ The same steps as always!
 
 `B` is 11 in decimal, so:
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_11.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_11.gif){: loading="lazy" decoding="async" width="427" height="198" }
 
 11 + 7 = 18 (decimal). Since 18 ≥ 16:
 - 18 - 16 = 2 → write **2**
@@ -248,7 +248,7 @@ The same steps as always!
 
 so the result is 0x12. Now lets take a bit more complex example to make our concepts crystal clear:
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_13.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_13.gif){: loading="lazy" decoding="async" width="500" height="331" }
 
 **Ones column:** `F` (15) + `B` (11) = 26 (decimal). Since 26 ≥ 16 so 26 - 16 = 10. So write **A**, carry **1**.
 
@@ -260,7 +260,7 @@ Result: `0x8A`
 Here we again follow the same borrowing idea as before, if the minuend is smaller than the subtrahend, borrow 1 from the next column left. That borrowed 1 is worth **16** in the current column. 
 ### Example 1: 12 - 7 (in hex)
 
-![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_14.gif)
+![diagram](/Tutorials/DLD/Number_System_2/Number_System_GIF_14.gif){: loading="lazy" decoding="async" width="500" height="331" }
 
 **Ones column:** 2 - 7 is clearly not enough, so we borrow from the 16s column.
 - The 16s column's 1 becomes 0.

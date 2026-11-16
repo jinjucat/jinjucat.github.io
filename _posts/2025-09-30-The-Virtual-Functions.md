@@ -27,7 +27,7 @@ public:
 ```
 We have a simple class `Ex1`, having three virtual functions, `foo(void)`, `bar(void)` and a virtual destructor. When we mark a function as virtual, the compiler arranges things differently inside the object. Each object of `Ex1` now contains a hidden pointer called the **vptr** (Virtual Table Pointer) right at the start of the object. The size of vptr depends on the architecture, and since we're on a 64-bit architecture, vptr is 8 bytes (it will be 4 bytes in a 32 bit architecture). The vptr points to a table in memory known as the **vtable**. The vtable is simply an array of function addresses, one for each virtual function. So in our case, we assume that the vtable for `Ex1` will have three entries, one for `foo()` , second one for `bar()` and the third one for the destructor `~Ex1`. If we invoke  `foo()`, the program won’t directly call it like how we've seen till now. Instead, it looks up the `foo` entry in the vtable and calls the function address stored there. 
 
-![diagram](/assets/images/Pasted image 20251010165442.png){: style="display:block; margin:auto; width:70%" }
+![diagram](/assets/images/Pasted image 20251010165442.webp){: style="display:block; margin:auto; width:70%" loading="lazy" decoding="async" width="530" height="231" }
 
 However later we'll see, that there's a lot more to a vtable than entries of virtual functions alone. Here's our main function...
 ```cpp
@@ -59,7 +59,7 @@ call    operator new(ulong)
 We want to allocate 16 bytes for our object... We have 4 bytes for our `var1` data member, and our vptr is taking up 8 bytes. That makes a total of 12 bytes (4+8), but because of 16 byte alignment, we round it up to 16 bytes (0x10). After returning from operator new, our `rax` now holds the address of our newly allocated 16 bytes, which is our object.
 Lets see the address of our object in GDB:
 
-![diagram](/assets/images/Pasted image 20250922180033.png)
+![diagram](/assets/images/Pasted image 20250922180033.webp){: loading="lazy" decoding="async" width="797" height="84" }
 
 Address of our object is `0x55555556aeb0`. Continuing to the disassembly...
 
@@ -78,7 +78,7 @@ call    Ex1::Ex1(void)
 
 and then we call our constructor `Ex1`. Lets check this:
 
-![diagram](/assets/images/Pasted image 20250922180206.png)
+![diagram](/assets/images/Pasted image 20250922180206.webp){: loading="lazy" decoding="async" width="549" height="76" }
 
 and now...
 
@@ -96,11 +96,11 @@ We are inside our `Ex1` constructor, and after our function prologue and saving 
 ```
 
 seeing it in GDB...
-![diagram](/assets/images/Pasted image 20250922180442.png)
+![diagram](/assets/images/Pasted image 20250922180442.webp){: loading="lazy" decoding="async" width="831" height="148" }
 
 We see that `rdx` holds the address of the vtable. When we examine the memory at the vtable, we get our first virtual function address. But we can see that the address that is getting loaded in `rdx` is `vtable for Ex1 + 16`. Why the addition of 16 bytes?
 
-![diagram](/assets/images/Pasted image 20250922175420.png)
+![diagram](/assets/images/Pasted image 20250922175420.webp){: loading="lazy" decoding="async" width="555" height="213" }
 
 This is our complete vtable, it doesn't hold the addresses of our virtual functions alone, but it has other stuff. In the start, we see 8 null bytes, this is our **offset to top**. It’s a small integer stored in the vtable that tells at runtime how far the current subobject is from the start of the complete object in memory. But here since it's 0, so this indicates that this vtable belongs to the main class and our object doesn't consist of a subobject as we have a single class (no inheritence), so no adjustments are needed. This entry is placed two slots before the vtable pointer, at index -2. It exists in all vtables, even in classes that have virtual bases but no virtual functions.
 
@@ -126,29 +126,29 @@ explicit type_info(const char *__n): __name(__n) { }
 ```
 
 Anyway, back to our `typeinfo for Ex1`. Since `__class_type_info` itself has virtual functions, and so does `type_info`, so its object layout must include a vptr. So, at `0x0`, the object stores a pointer to the vtable for `__class_type_info`. **Type Name Pointer** at +0x08 points to the mangled name string of the class which in this case is `3Ex1`. This type name is actually the `*__name` we just discussed in type_info class. Lets double click typeinfo which will bring us to...
-![diagram](/assets/images/Pasted image 20250922191230.png)
+![diagram](/assets/images/Pasted image 20250922191230.webp){: loading="lazy" decoding="async" width="696" height="46" }
 
 Lets locate our typeinfo object:
-![diagram](/assets/images/Pasted image 20250922195347.png)
+![diagram](/assets/images/Pasted image 20250922195347.webp){: loading="lazy" decoding="async" width="811" height="97" }
 
 the address where our typeinfo object for class `Ex1` is located in memory is `0x555555557da0`. If we examine the contents at our typeinfo object's address, we see that it holds the address of `__class_type_info`'s vtable.
-![diagram](/assets/images/Pasted image 20250922200007.png)
+![diagram](/assets/images/Pasted image 20250922200007.webp){: loading="lazy" decoding="async" width="1000" height="76" }
 
 Lets see what the vtable further holds... 
-![diagram](/assets/images/Pasted image 20250922200119.png)
+![diagram](/assets/images/Pasted image 20250922200119.webp){: loading="lazy" decoding="async" width="969" height="91" }
 
 lets pick a random address, say `0x00007ffff7cacaa0`.
-![diagram](/assets/images/Pasted image 20250922200239.png)
+![diagram](/assets/images/Pasted image 20250922200239.webp){: loading="lazy" decoding="async" width="834" height="81" }
 
 It is the address of `__do_catch(args)` which is a member function of `__class_type_info` 
 ```cpp
 virtual bool __do_catch(const type_info* __thr_type, void** __thr_obj, unsigned __outer) const;
 ```
 We just discussed the type name pointer which is at offset of `+0x8` from the typeinfo object, lets now actually see it:
-![diagram](/assets/images/Pasted image 20250922203755.png)
+![diagram](/assets/images/Pasted image 20250922203755.webp){: loading="lazy" decoding="async" width="829" height="77" }
 
 The first address we see we just saw is the address of `__class_type_info`'s vtable, so the second one is going to be our **type info name**.
-![diagram](/assets/images/Pasted image 20250923132412.png)
+![diagram](/assets/images/Pasted image 20250923132412.webp){: loading="lazy" decoding="async" width="770" height="82" }
 
 Lets return back now! Recall that we defined only 3 virtual functions, but our vtable has entries for 4 virtual functions. 
 
@@ -196,7 +196,7 @@ retn
 ```
 
 We delete our object from memory. Recall, that we allocated 16 bytes (`0x10`) for this object, so we pass that as our size. This shows, why two destructor were needed, and added to the vtable.  Till now we've seen how our vtable actually looks like.
-![diagram](/assets/images/Pasted image 20251010165609.png){: style="display:block; margin:auto; width:100%;" }
+![diagram](/assets/images/Pasted image 20251010165609.webp){: style="display:block; margin:auto; width:100%;" loading="lazy" decoding="async" width="1056" height="488" }
 
 Lets return back to `Ex1`'s constructor, after having loaded the effective address of `Ex1`'s vtable in `rdx`.
 
@@ -209,7 +209,7 @@ retn
 ```
 
 We simply store the address of our `Ex1` vtable at the start of our object.
-![diagram](/assets/images/Pasted image 20250922205826.png)
+![diagram](/assets/images/Pasted image 20250922205826.webp){: loading="lazy" decoding="async" width="839" height="109" }
 
 Now we return back to main... and this is pretty much it! 
 ### Single Parent with Virtual functions...
@@ -245,7 +245,7 @@ call    __Znwm
 
 We allocate a 16 byte object on the stack. The address our function is allocated at is `0x55555556aeb0`.
 
-![diagram](/assets/images/Pasted image 20250923135807.png)
+![diagram](/assets/images/Pasted image 20250923135807.webp){: loading="lazy" decoding="async" width="326" height="43" }
 
 and then..
 
@@ -286,16 +286,16 @@ lea     rdx, off_3D88 ;vtable for Ex1
 ```
 
 Lets dig into our vtable for `Ex1`.
-![diagram](/assets/images/Pasted image 20250924025455.png)
+![diagram](/assets/images/Pasted image 20250924025455.webp){: loading="lazy" decoding="async" width="702" height="157" }
 
 First comes the offset to top that is `0x0`, and then comes the typeinfo pointer as we've already seen. Our vtable has only a single entry in the vtable, for the function `bar()`. This is because `foo()` is not virtual, and vtable holds function addresses of virtual functions only. 
-![diagram](/assets/images/Pasted image 20250924030156.png)
+![diagram](/assets/images/Pasted image 20250924030156.webp){: loading="lazy" decoding="async" width="804" height="77" }
 
 We can see that `rdx` holds the address of our vtable, which is `0x555555557d88`, and the address of our first virtual function is `0x0000555555555190`.
-![diagram](/assets/images/Pasted image 20250924030322.png)
+![diagram](/assets/images/Pasted image 20250924030322.webp){: loading="lazy" decoding="async" width="663" height="76" }
 
 Lets see where the typeinfo for `Ex1` takes us to:
-![diagram](/assets/images/Pasted image 20250924025734.png)
+![diagram](/assets/images/Pasted image 20250924025734.webp){: loading="lazy" decoding="async" width="804" height="60" }
 
 Here we have a `__class_type_info` object having vptr to `__class_type_info` vtable, and then the typeinfo name which is `Ex1`. 
 Now ends our constructor `Ex1`...
@@ -310,10 +310,10 @@ retn
 
 Lets take a view at GDB too...
 
-![diagram](/assets/images/Pasted image 20250924030453.png)
+![diagram](/assets/images/Pasted image 20250924030453.webp){: loading="lazy" decoding="async" width="542" height="76" }
 
 So once we return from our `Ex1` constructor, this is what things are actually going to look like!
-![diagram](/assets/images/Pasted image 20250923175753.png){: style="display:block; margin:auto;" }
+![diagram](/assets/images/Pasted image 20250923175753.webp){: style="display:block; margin:auto;" loading="lazy" decoding="async" width="681" height="299" }
 
 When we return back to `Ex2` constructor, we see that the `Ex2`'s vtable actually overwrites the vptr currently holding `Ex1` vtable's address in our object. See this disassembly:
 
@@ -327,13 +327,13 @@ retn
 ```
 
 If we double click our `off_3D68`....
-![diagram](/assets/images/Pasted image 20250924030624.png)
+![diagram](/assets/images/Pasted image 20250924030624.webp){: loading="lazy" decoding="async" width="702" height="168" }
 
 We see our vtable for `Ex2`'s vtable... this makes our object look like....
-![diagram](/assets/images/Pasted image 20250924030824.png)
+![diagram](/assets/images/Pasted image 20250924030824.webp){: loading="lazy" decoding="async" width="667" height="149" }
 
 ...in memory....  Lets now see what our typeinfo object looks like.
-![diagram](/assets/images/Pasted image 20250924031023.png)
+![diagram](/assets/images/Pasted image 20250924031023.webp){: loading="lazy" decoding="async" width="807" height="72" }
 
 This is it in IDA. One very important thing we notice here, is that the vptr points to `__si_class_type_info`'s vtable. Let's...
 
@@ -351,11 +351,11 @@ In the typeinfo object we saw in IDA:
 -  At `0x3D90`, we have our vptr to `__si_class_type_info` vtable.
 -  Then at `0x3D98`, we have our `typeinfo name for Ex2` which is `3Ex2`.
 - And then at `0x3DA0`, comes our typeinfo for `Ex1`, which as defined in `__si_class_type_info`, is our `__base_type`.
-![diagram](/assets/images/Pasted image 20250924033458.png){: style="display:block; margin:auto;" }
+![diagram](/assets/images/Pasted image 20250924033458.webp){: style="display:block; margin:auto;" loading="lazy" decoding="async" width="675" height="322" }
 
 ### Once Virtual, Always Virtual 
 But why does `Ex2`'s vtable hold addresses for 2 virtual functions, when we only declared `foo()` as virtual and `bar()` was non-virtual? That's because `Ex2::bar()` is an inherited virtual function. Even though we didn't write virtual in `Ex2`, but because `Ex1::bar()` was virtual, so `Ex2::bar()` must be virtual too. It **overrides** `Ex1::bar()` in the vtable. Note that we declared `foo()` as virtual in `Ex2`. This is a new virtual function  and doesn't override anything and simply gets added to the vtable. So we see, that _virtual-ness_ is inherited automatically. This way, you can believe `Ex2`'s `bar()` to be virtual too. So now our object looks something like this...
-![diagram](/assets/images/Pasted image 20250923175927.png){: style="display:block; margin:auto;" }
+![diagram](/assets/images/Pasted image 20250923175927.webp){: style="display:block; margin:auto;" loading="lazy" decoding="async" width="681" height="299" }
 
 What if... we had another virtual function in `Ex1`, which isn't even declared in `Ex2`? Well, that would still be in `Ex2`'s virtual table, because `Ex1` is the primary base of `Ex2`, and then our virtual table will hold another entry for that function in the vtable. A primary base is such that it: 
 - Starts at **offset 0** inside the derived object, and
@@ -388,13 +388,13 @@ call    rdx
 
 Let me explain the assembly now... `rax` holds our this pointer.
 
-![diagram](/assets/images/Pasted image 20250923000839.png)
+![diagram](/assets/images/Pasted image 20250923000839.webp){: loading="lazy" decoding="async" width="217" height="44" }
 
 At line 19, we dereference the address stored in `rax`, and overwrite `rax` with whatever thing we got after dereferencing, which will be the address of `Ex2`'s vtable.
-![diagram](/assets/images/Pasted image 20250923001035.png)
+![diagram](/assets/images/Pasted image 20250923001035.webp){: loading="lazy" decoding="async" width="829" height="79" }
 
 Great! Now we further pick the contents from the address of our vtable, and move them in `rdx`, which will be the address of our virtual function `bar()`.
-![diagram](/assets/images/Pasted image 20250923001206.png)
+![diagram](/assets/images/Pasted image 20250923001206.webp){: loading="lazy" decoding="async" width="699" height="43" }
 
 We load our this pointer in `rdi`, and then call `rdx`. Since `rdx` has the address of my first virtual function in `Ex2`'s vtable, so that will be called. Here we notice a different way of calling functions. This is an **indirect call**. Although `Ex1` declared `bar()` as virtual, which automatically made `Ex2::bar()` virtual through inheritance, the runtime polymorphism mechanism accurately identified that the actual object was of type `Ex2` and hence invoked `Ex2`'s overridden version of `bar()`. This is exactly what we call **dynamic binding**, where the function is chosen at runtime based on the actual object, not just the pointer type. This shows how virtual functions enable runtime polymorphism, which means that the function call is resolved based on the actual object type rather than the pointer type.
 
@@ -456,17 +456,17 @@ mov     [rax], rdx
 ```
 
 Here we load the effective address of our `Ex1`'s vtable in `rdx`.
-![diagram](/assets/images/Pasted image 20250923011259.png)
+![diagram](/assets/images/Pasted image 20250923011259.webp){: loading="lazy" decoding="async" width="692" height="186" }
 
 We see two entries in the vtable, of the two virtual member functions `Ex1` class has. We don't need much explanation of the vtable, because we're already very much familiar with that. Lets also take a look at the typeinfo object because... why not?
-![diagram](/assets/images/Pasted image 20250923005102.png)
+![diagram](/assets/images/Pasted image 20250923005102.webp){: loading="lazy" decoding="async" width="810" height="61" }
 
 lets take a look at how the object looks like in real...
-![diagram](/assets/images/Pasted image 20250923011544.png)
+![diagram](/assets/images/Pasted image 20250923011544.webp){: loading="lazy" decoding="async" width="703" height="130" }
 
 and...
 
-![diagram](/assets/images/Pasted image 20250923180417.png){: style="display:block; margin:auto; width:60%;" }
+![diagram](/assets/images/Pasted image 20250923180417.webp){: style="display:block; margin:auto; width:60%;" loading="lazy" decoding="async" width="900" height="484" }
 We're done with our call to primary case, so lets return back to our `Ex3`'s constructor. 
 
 ```cpp
@@ -486,17 +486,17 @@ mov     [rax], rdx
 ```
 
 Lets see what our `Ex2` vtable's address is which gets written at `0x55555556aec0`.
-![diagram](/assets/images/Pasted image 20250923011751.png)
+![diagram](/assets/images/Pasted image 20250923011751.webp){: loading="lazy" decoding="async" width="701" height="118" }
 
 Our object now looks like this...
 
-![diagram](/assets/images/Pasted image 20250923181153.png){: style="width:60%;" }
+![diagram](/assets/images/Pasted image 20250923181153.webp){: style="width:60%;" loading="lazy" decoding="async" width="489" height="440" }
 
 and now, lets take a peek into what `Ex2`'s vtable looks like...
-![diagram](/assets/images/Pasted image 20250923011810.png)
+![diagram](/assets/images/Pasted image 20250923011810.webp){: loading="lazy" decoding="async" width="493" height="140" }
 
 Also, lets take a look at its typeinfo:
-![diagram](/assets/images/Pasted image 20250923015514.png)
+![diagram](/assets/images/Pasted image 20250923015514.webp){: loading="lazy" decoding="async" width="820" height="59" }
 
 `Ex2`'s vtable consists of only one virtual function entry, that is `bar()`. So nothing new here. Lets return and the assembly we encounter right after returning is...
 
@@ -508,7 +508,7 @@ mov     [rax], rdx
 
 We're overwriting `Ex1`'s vtable entry with the vtable of `Ex3`. But what does `Ex3`'s vtable look like?
 
-![diagram](/assets/images/Pasted image 20250923011922.png)
+![diagram](/assets/images/Pasted image 20250923011922.webp){: loading="lazy" decoding="async" width="709" height="345" }
 
 Oh wow... this is a pretty big vtable. Lets just focus on the first half for now till `0x3CF8` which we'll call our **primary vtable**... We see entries for three virtual functions. They are `Ex3::foo()`, `Ex3::baz()` and `Ex1::qux()`.
 
@@ -519,11 +519,11 @@ The primary vtable then stores the virtual function pointers, starting with `Ex3
 
 Lets continue to our **secondary vtable** as we'll call it, which is at `0x3D10`, which begins with another offset to top value. But this time it's not all zeroes as we've seen in the previous cases, but is actually a negative integer, -16 in two's complement. This indicates that to reach the start of the complete `Ex3` object from this secondary base class part, we need to move back 16 bytes in memory. This secondary vtable also has the same typeinfo object for `Ex3`, and then comes `Ex2::bar()`. The `Ex2` in `Ex2::bar()` suggests that it is not overridden by `Ex3`, and that `Ex2` is the secondary base class.
 Lets see this in GDB:
-![diagram](/assets/images/Pasted image 20250923015731.png)
+![diagram](/assets/images/Pasted image 20250923015731.webp){: loading="lazy" decoding="async" width="704" height="167" }
 
 We have overwritten our vptr with the address of `Ex3`'s vtable, while at offset of +16 our `Ex2`'s vtable still remains intact. 
 
-![diagram](/assets/images/Pasted image 20250923181615.png){: style="width:70%;" }
+![diagram](/assets/images/Pasted image 20250923181615.webp){: style="width:70%;" loading="lazy" decoding="async" width="553" height="453" }
 
 Lets move forward with the disassembly:
 ```cpp
@@ -533,14 +533,14 @@ mov     [rax+10h], rdx
 ```
 Now we have gone ahead +16 bytes (0x10) from our this pointer, and overwritten that memory location with another address... double clicking on `off_3D20` reveals, that it is actually our `Ex3` vtable (Secondary vtable). 
 
-![diagram](/assets/images/Pasted image 20250923020120.png)
+![diagram](/assets/images/Pasted image 20250923020120.webp){: loading="lazy" decoding="async" width="520" height="38" }
 
 Lets see our object now:
-![diagram](/assets/images/Pasted image 20250923020236.png)
+![diagram](/assets/images/Pasted image 20250923020236.webp){: loading="lazy" decoding="async" width="699" height="173" }
 
 ### The nuts and bolts of \_\_vmi_class_type_info.. 
 We are almost done, but lets first see how the typeinfo looks like for `Ex3`?
-![diagram](/assets/images/Pasted image 20250923021337.png)
+![diagram](/assets/images/Pasted image 20250923021337.webp){: loading="lazy" decoding="async" width="796" height="423" }
 
 Unlike before, where we had `__class_type_info` and `__si_class_type_info`, here we have `__vmi_class_type_info`, and this is huge!  `__vmi_class_type_info` is also the GCC C++ ABI implementation for classes with Virtual or Multiple Inheritance or both (this is where `vmi` comes from). Lets first look at  `__vmi_class_type_info`'s constructor and some data members:
 ```cpp
@@ -557,7 +557,7 @@ __base_class_type_info __base_info[1]; // Array of bases.
 explicit __vmi_class_type_info(const char* __n, int ___flags): __class_type_info(__n), __flags(___flags), __base_count(0) { }
 ```
 It calls the parent class constructor with the name as an argument ` __class_type_info(__n)`,stores the flags parameter in the `__flags` member variable and initializes `__base_count` to 0. Recall that `__type_info` had a `const char *__name;`, which was inherited by `__class_type_info`. So we're simply passing it that. This is how our `__vmi_class_type_info` typeinfo structure looks like:
-![diagram](/assets/images/Pasted image 20250923181922.png){: style="display:block; margin:auto; " }
+![diagram](/assets/images/Pasted image 20250923181922.webp){: style="display:block; margin:auto; " loading="lazy" decoding="async" width="594" height="517" }
 
 If we take a look at the typeinfo for `Ex3` in IDA again, so we get to know, that at:
 -  At offset`0x3D60` we have a pointer to `__vmi_class_type_info` vtable. 
@@ -640,7 +640,7 @@ Our compiler forbids us from creating an `Animal` object. However, if i create a
  Animal* a = new Dog(); //outputs Woof
 ```
 We know how objects get instantiated, and how the vtable of the primary base gets stored right at our object's starting address in case of single inheritance involving virtual functions, so we won't dive into that, but we'd like to see the `Animal` vtable, since it has a pure virtual function.
-![diagram](/assets/images/Pasted image 20250923152949.png)
+![diagram](/assets/images/Pasted image 20250923152949.webp){: loading="lazy" decoding="async" width="507" height="157" }
 
 We see a strange kind of entry where our vptr points to, which is  `__cxa_pure_virtual`. Later the `Animal` vtable gets overwritten by `Dog`'s vtable, as we've already seen in inheritance cases, so we never make a call to  `__cxa_pure_virtual`, but lets try triggering a call to it, to see what happens. 
 
@@ -674,9 +674,9 @@ terminate called without an active exception
 Aborted (core dumped)
 ```
 We did successfully make a call to a pure virtual function... but our program got aborted. We know what our `Animal`'s vtable looked like, it had a single entry for  `__cxa_pure_virtual()` and this is exactly what was called then. If we take a look in GDB:
-![diagram](/assets/images/Pasted image 20250923154800.png)
+![diagram](/assets/images/Pasted image 20250923154800.webp){: loading="lazy" decoding="async" width="909" height="184" }
 The address of our object is `0x7fffffffde10` and its vtable is at `0x0000555555557d88`. If we further look inside the vtable, we get the first entry to `__cxa_pure_virtual`.
-![diagram](/assets/images/Pasted image 20250923154952.png)
+![diagram](/assets/images/Pasted image 20250923154952.webp){: loading="lazy" decoding="async" width="706" height="116" }
 We move the address of our first vtable entry inside `rdx`, and give it a call after which we reach inside the `__cxa_pure_virtual()` method.
 
 ```cpp
@@ -691,7 +691,7 @@ We move the address of our first vtable entry inside `rdx`, and give it a call a
 ```
 
 This is the disassembly of our  `__cxa_pure_virtual()` method. We see it writes some string at address `0x7ffff7dab704` to stdout, and calls `terminate()`. 
-![diagram](/assets/images/Pasted image 20250923155415.png)
+![diagram](/assets/images/Pasted image 20250923155415.webp){: loading="lazy" decoding="async" width="489" height="43" }
 
 This is the same string we saw in our output when we triggered a call to `Animal::speak()`. If we see this in our C++ Standard library...
 ```cpp

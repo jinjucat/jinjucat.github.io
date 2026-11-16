@@ -128,7 +128,7 @@ Now we have the truth table ready, and lets translate the boolean expression int
 
 So for this boolean expression we are going to use a NOT gate as we have `y'`, then we will use an AND gate as we have `y'z`, and since `x` and `y'z` are getting added so for that we will need an OR gate. The circuit diagram should look something like:
 
-![diagram](/assets/images/BE/BE16.png){: loading="lazy" decoding="async" width="737" height="413" }
+![diagram](/assets/images/BE/BE16.webp){: loading="lazy" decoding="async" width="737" height="413" }
 
 Lets delve into some practical work to get a better idea. First of all I got the 7404 IC which is our NOT gate to invert our `y` input:
 

@@ -82,11 +82,11 @@ It does look scary but actually it's just a mangled name for Base::Base(int, cha
                                                                                             
 However name mangling can be disabled in IDA by navigating to `Options`, then select `Demangled names`.
 
-![diagram1](/assets/images/Pasted image 20250921185810.png){: style="display:block; margin:auto; width:300px;" }
+![diagram1](/assets/images/Pasted image 20250921185810.webp){: style="display:block; margin:auto; width:300px;" loading="lazy" decoding="async" width="392" height="399" }
 
 and then set the following settings
 
-![diagram2](/assets/images/Pasted image 20250921185957.png){: style="display:block; margin:auto; width:300px;" }
+![diagram2](/assets/images/Pasted image 20250921185957.webp){: style="display:block; margin:auto; width:300px;" loading="lazy" decoding="async" width="457" height="465" }
 
 Finally, lets dig into the `Base` constructor... the call to our constructor is something like this;
 
@@ -122,7 +122,7 @@ retn
 
 From line 8 onward, we start storing our arguments inside our object. `rax` holds our `this` pointer. First `var_C` which holds 5 gets stored at the location `rax` is pointing to. Then at line 13 we see that we are storing our character currently stored in `dl` at an offset of `+0x04` from where `rax` is currently pointing at, giving us a final layout like:
 
-![diagram3](/assets/images/Pasted image 20250923213325.png){: style="display:block; margin:auto; width:60%;" }
+![diagram3](/assets/images/Pasted image 20250923213325.webp){: style="display:block; margin:auto; width:60%;" loading="lazy" decoding="async" width="555" height="316" }
 
 lets return back to our main function and continue analysis.
 
@@ -155,7 +155,7 @@ call    Base::Base(int,char)
 As seen in line 15, we store our returned pointer in `rbx`. Now we set our arguments, as seen in the C++ code, we are constructing a new object `B2`, with arguments 9 and 'x'. For that we set `rdi` as our first argument (`this` pointer), our second argument `rsi` as 9 and `rdx`, our third argument as 'x'. Then we call our `Base` constructor again whose disassembly we just discussed. 
 The final layout is like...
 
-![diagram4](/assets/images/Pasted image 20250923213400.png){: style="display:block; margin:auto; width:60%;" }
+![diagram4](/assets/images/Pasted image 20250923213400.webp){: style="display:block; margin:auto; width:60%;" loading="lazy" decoding="async" width="552" height="309" }
 
 We finally return to our main function...
 
@@ -189,36 +189,36 @@ retn
 
 Lets first take a look at the creation of `B1` object which is created on the stack. 
 
-![diagram5](/assets/images/Pasted image 20250921203711.png)
+![diagram5](/assets/images/Pasted image 20250921203711.webp){: loading="lazy" decoding="async" width="492" height="86" }
 
 This address gets stored in `rdi` and all the arguments are set (reference the assembly snippets discussed previously side by side) and the constructor call is made. 
 
-![diagram6](/assets/images/Pasted image 20250921204150.png)
+![diagram6](/assets/images/Pasted image 20250921204150.webp){: loading="lazy" decoding="async" width="486" height="99" }
 
 First we store our integer value which is our `a` data member at the location where we have our `this` pointer at, which is also stored in `rdi`. 
 
-![diagram7](/assets/images/Pasted image 20250921204345.png)
+![diagram7](/assets/images/Pasted image 20250921204345.webp){: loading="lazy" decoding="async" width="486" height="99" }
 
 next we have to store our character that is 'a', in our `c` data member, having an ASCII of `0x61` in this case 4 bytes after where our this pointer is currently at. 
 
-![diagram8](/assets/images/Pasted image 20250921204513.png)
+![diagram8](/assets/images/Pasted image 20250921204513.webp){: loading="lazy" decoding="async" width="368" height="55" }
 
 and this is what we get... our arguments are neatly stored inside our object. Lets return to main to see how things will be stored in our object `B2` on the heap!
 First as discussed earlier, we get 8 bytes allocated on the heap
 
-![diagram9](/assets/images/Pasted image 20250921204704.png)
+![diagram9](/assets/images/Pasted image 20250921204704.webp){: loading="lazy" decoding="async" width="797" height="121" }
 
 The address of our object is `0x55555556aeb0`and now we call our `Base` constructor. 
 
-![diagram10](/assets/images/Pasted image 20250921204817.png)
+![diagram10](/assets/images/Pasted image 20250921204817.webp){: loading="lazy" decoding="async" width="471" height="83" }
 
 `rdi` is pointing to the freshly allocated 8 byte area on the heap. First as seen earlier, we store our integer which in this case is 9, after which we get the following result:
 
-![diagram11](/assets/images/Pasted image 20250921204921.png)
+![diagram11](/assets/images/Pasted image 20250921204921.webp){: loading="lazy" decoding="async" width="370" height="78" }
 
 and then we store our character... which in this case is 'x' having as ASCII of `0x78`.
 
-![diagram12](/assets/images/Pasted image 20250921205002.png)
+![diagram12](/assets/images/Pasted image 20250921205002.webp){: loading="lazy" decoding="async" width="333" height="48" }
 
 Then we finally return to main after both of our objects have been created, and end our program! I guess that is it for today.
 
