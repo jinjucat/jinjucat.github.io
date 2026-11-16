@@ -1,3 +1,15 @@
+---
+layout: single
+title:  "A Formal Introduction to Boolean Expressions"
+categories: [Digital Logic Design]
+date: 2026-11-16
+classes: wide
+tags:
+  - Digital Logic Design
+  - dld
+  - Hardware
+---
+
 So far we have learned the basic gates. Now we need to learn how to **use them wisely**. A Boolean expression can often be written in a shorter form, and a shorter expression means a circuit with fewer gates, fewer wires, lower cost, and faster speed. But first...
 ### What really is a Boolean expression?
 
