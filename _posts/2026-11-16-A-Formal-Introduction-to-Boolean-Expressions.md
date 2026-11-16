@@ -113,35 +113,36 @@ And now lets take the whole expression (x + y'z):
 Now we have the truth table ready, and lets translate the boolean expression into a circuit and then confirm whether our circuit conforms with the truth table that is created or not, so the truth table here is a way to check whether our circuit behaves correctly or not...
 
 So for this boolean expression we are going to use a NOT gate as we have `y'`, then we will use an AND gate as we have `y'z`, and since `x` and `y'z` are getting added so for that we will need an OR gate. The circuit diagram should look something like:
-![[BE16.png]]
+
+![diagram](/assets/images/BE/BE16.png)
 
 Lets delve into some practical work to get a better idea. First of all I got the 7404 IC which is our NOT gate to invert our `y` input:
 
-![[BE1.jpg]]
+![diagram](/assets/images/BE/BE1.jpg)
 
 Next we are going to get our input wire y in the first logic circuit (all input wires x, y and z use the blue jumper wire).
 
-![[BE2.jpg]]
+![diagram](/assets/images/BE/BE2.jpg)
 
 Next we are going to insert our 7408 IC which is our AND gate, and get the output of NOT gate which is `y'` as an input to our AND gate:
 
-![[BE3.jpg]]
+![diagram](/assets/images/BE/BE3.jpg)
 
 Once we have `y'` as an input to AND gate, we are going to get the input wire 2 which is `Z`:
 
-![[BE4.jpg]]
+![diagram](/assets/images/BE/BE4.jpg)
 
 We will then get our 7432 IC which is the OR gate and get the output of the AND gate which is `y'z` to it as the first input:
 
-![[BE5.jpg]]
+![diagram](/assets/images/BE/BE5.jpg)
 
 Get the input wire `x` in OR gate:
 
-![[BE6.jpg]]
+![diagram](/assets/images/BE/BE6.jpg)
 
 Once all the input wires `y`, `z` and `x` are HIGH, the LED lights up!
 
-![[BE7.jpg]]
+![diagram](/assets/images/BE/BE7.jpg)
 
 Lets confirm our results from the truth table:
 
@@ -153,7 +154,7 @@ This is the first row of our truth table:
 | 0   | 0   | 0   | 1   | 0    | 0      |
 All three input wires are LOW and none is HIGH so the LED doesn't light up as `x+y'z` is 0.
 
-![[BE8.jpg]]
+![diagram](/assets/images/BE/BE8.jpg)
 
 ### Case 2:
 
@@ -162,7 +163,7 @@ All three input wires are LOW and none is HIGH so the LED doesn't light up as `x
 | 0   | 0   | 1   | 1   | 1    | 1      |
 When  `x` and `y` inputs are LOW, and `z` is HIGH, our bulb lights up as the result of `x+y'z` is 1.
 
-![[BE9.jpg]]
+![diagram](/assets/images/BE/BE9.jpg)
 
 ### Case 3:
 
@@ -171,7 +172,7 @@ When  `x` and `y` inputs are LOW, and `z` is HIGH, our bulb lights up as the res
 | 0   | 1   | 0   | 0   | 0    | 0      |
 When input wires `x` and `z` are LOW, and `y` is HIGH, LED does not light up as `x+y'z` is 0:
 
-![[BE10.jpg]]
+![diagram](/assets/images/BE/BE10.jpg)
 
 ### Case 4:
 | x   | y   | z   | y'  | y'.z | x+ y'z |
@@ -179,7 +180,7 @@ When input wires `x` and `z` are LOW, and `y` is HIGH, LED does not light up as 
 | 0   | 1   | 1   | 0   | 0    | 0      |
 When input wire `x` is LOW but `y` and `z` are HIGH, the LED doesn't light up again as `x+y'z` is 0:
 
-![[BE11.jpg]]
+![diagram](/assets/images/BE/BE11.jpg)
 
 ### Case 5:
 
@@ -188,7 +189,7 @@ When input wire `x` is LOW but `y` and `z` are HIGH, the LED doesn't light up ag
 | 1   | 0   | 0   | 1   | 0    | 1      |
 When `x` is HIGH and `y` and `z`  are LOW, our LED lights up as `x+y'z` is 1:
 
-![[BE12.jpg]]
+![diagram](/assets/images/BE/BE12.jpg)
 
 ### Case 6:
 | x   | y   | z   | y'  | y'.z | x+ y'z |
@@ -196,7 +197,7 @@ When `x` is HIGH and `y` and `z`  are LOW, our LED lights up as `x+y'z` is 1:
 | 1   | 0   | 1   | 1   | 1    | 1      |
 When `x` is HIGH, and if `z` is HIGH but `y` is LOW, we again get the LED lit as the result of `x+y'z` is 1:
 
-![[BE13.jpg]]
+![diagram](/assets/images/BE/BE13.jpg)
 
 ### Case 7:
 | x   | y   | z   | y'  | y'.z | x+ y'z |
@@ -204,14 +205,15 @@ When `x` is HIGH, and if `z` is HIGH but `y` is LOW, we again get the LED lit as
 | 1   | 1   | 0   | 0   | 0    | 1      |
 Again our LED lights up as `x` is HIGH:
 
-![[BE14.jpg]]
+![diagram](/assets/images/BE/BE14.jpg)
 
 ### Case 8:
 | x   | y   | z   | y'  | y'.z | x+ y'z |
 | --- | --- | --- | --- | ---- | ------ |
 | 1   | 1   | 1   | 0   | 0    | 1      |
 In the final case when every input is HIGH our LED lights up again as the result of the boolean expression is 1!
-![[BE15.jpg]]
+
+![diagram](/assets/images/BE/BE15.jpg)
 
 So in this practical we took a Boolean expression, `F = x + y'z`, and worked with it in three ways. First as an expression, as a truth table, and as a real circuit on the breadboard. We first filled in the truth table step by step, finding `y'`, then `y'z`, then the whole expression. Then we built the circuit using NOT, AND and OR gates and tested every input combination.
 
