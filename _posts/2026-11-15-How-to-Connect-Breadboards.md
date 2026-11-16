@@ -2,7 +2,7 @@
 layout: single
 title:  "How to Connect Breadboards"
 categories: [Digital Logic Design]
-date: 2026-15-11
+date: 2026-11-15
 classes: wide
 tags:
   - Digital Logic Design
