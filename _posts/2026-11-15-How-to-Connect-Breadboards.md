@@ -1,3 +1,15 @@
+---
+layout: single
+title:  "How to Connect Breadboards"
+categories: [Digital Logic Design]
+date: 2026-15-11
+classes: wide
+tags:
+  - Digital Logic Design
+  - dld
+  - Hardware
+---
+
 One breadboard is often not enough for a bigger circuit. The good news is that breadboards are made to be joined together, and you can share the same power supply between them.  For this you will need:
 - 2 breadboards 
 - Power supply already connected to the first breadboard 
