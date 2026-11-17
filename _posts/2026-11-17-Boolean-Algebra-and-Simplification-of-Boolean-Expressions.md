@@ -300,47 +300,47 @@ Two AND gates, a NOT gate and an OR gate become a single wire. Lets take a look 
 | 1   | 1   | 0   | 1   | 0    | 1          | 1   |
 We see that the last two columns yield the same results hence our simplification was correct. Getting our 7408 IC on the breadboard:
 
-![[BS1 1.jpg]]
+![diagram](/assets/images/BS/BS1.jpg)
 
 This is the first part of our boolean expression which is A.B:
 
-![[BS2 1.jpg]]
+![diagram](/assets/images/BS/BS2.jpg)
 
 Get the 7404 IC which is NOT gate to invert B input as in the second part of our expression we have A.B':
 
-![[BS3 1.jpg]]
+![diagram](/assets/images/BS/BS3.jpg)
 
 Get the B input....
 
-![[BS4 1.jpg]]
+![diagram](/assets/images/BS/BS4.jpg)
 
 Get the second 7408 IC as we have to do A.B'. We could have used the same AND IC we used for A.B but for convenience I used a second chip:
 
-![[BS5 1.jpg]]
+![diagram](/assets/images/BS/BS5.jpg)
 
 Get the same input A which we used in our first 7408 and get it as the first input in our second 7408, and also get the inverted B in our second 7408:
 
-![[BS6 1.jpg]]
+![diagram](/assets/images/BS/BS6.jpg)
 
 We have to OR the results of both the 7408 ICs.... 
 
-![[BS7 1.jpg]]
+![diagram](/assets/images/BS/BS7.jpg)
 
 The first input to 7432 IC comes from the result of A.B:
 
-![[BS8 1.jpg]]
+![diagram](/assets/images/BS/BS8.jpg)
 
 The second input to our 7432 IC comes from A.B':
 
-![[BS9 1.jpg]]
+![diagram](/assets/images/BS/BS9.jpg)
 
 Get our LED to test whether we did things right:
 
-![[BS10 1.jpg]]
+![diagram](/assets/images/BS/BS10.jpg)
 
 Don't forget to supply power to the IC:
 
-![[BS11 1.jpg]]
+![diagram](/assets/images/BS/BS11.jpg)
 
 Lets see whether our simplification is correct or not. This will get proved if for every time A is 1, we get the output as 1, means the LED lights up. Lets start with the first row of the truth table:
 
@@ -348,7 +348,7 @@ Lets see whether our simplification is correct or not. This will get proved if f
 | --- | --- | --- | --- | ---- | ---------- | --- |
 | 0   | 0   | 1   | 0   | 0    | 0          | 0   |
 
-![[BS15 1.jpg]]
+![diagram](/assets/images/BS/BS15.jpg)
 
 The result of `A.B+A.B'` is 0 and A is 0 too! Our LED does not light up.
 
@@ -361,7 +361,7 @@ A is 0 so A.B+A.B' is 0 too again so LED again won't light up:
 | 0   | 1   | 0   | 0   | 0    | 0          | 0   |
 
 
-![[BS14 1.jpg]]
+![diagram](/assets/images/BS/BS14.jpg)
 
 Case 3:
 Since A is 1 so A.B+A.B' is also 1 and the LED lights up... 
@@ -370,7 +370,7 @@ Since A is 1 so A.B+A.B' is also 1 and the LED lights up...
 | --- | --- | --- | --- | ---- | ---------- | --- |
 | 1   | 0   | 1   | 0   | 1    | 1          | 1   |
 
-![[BS13 1.jpg]]
+![diagram](/assets/images/BS/BS13.jpg)
 
 Case 4:
 Since A is 1, the result of A.B+A.B' is 1 and LED lights up proving our simplification correct!
@@ -379,7 +379,7 @@ Since A is 1, the result of A.B+A.B' is 1 and LED lights up proving our simplifi
 | --- | --- | --- | --- | ---- | ---------- | --- |
 | 1   | 1   | 0   | 1   | 0    | 1          | 1   |
 
-![[BS12 1.jpg]]
+![diagram](/assets/images/BS/BS12.jpg)
 
 Lets try another example to get a better grip on Boolean algebra and simplification of boolean expressions:
 ### Example 4: (A' + B')(A + B)
@@ -415,47 +415,48 @@ And for our simplified expressions:
 | 1   | 1   | 0   | 0   | 0     | 0    | 0         |
 
 So we see the results of the simplified version of the boolean expression and the original boolean expression are the same. Lets get our hands dirty with a breadboard for the simplified version. We will use two 7408s and one 7404:
-![[BS16.jpg]]
+
+![diagram](/assets/images/BS/BS16.jpg)
 
 Make sure to supply power to each:
 
-![[BS17.jpg]]
+![diagram](/assets/images/BS/BS17.jpg)
 
 Get the input wire A to pin 1 on 7404:
 
-![[BS18.jpg]]
+![diagram](/assets/images/BS/BS18.jpg)
 
 Pin 2 of 7404 outputs the inverted A input which goes as input to pin 1 on our first 7408 IC:
 
-![[BS19.jpg]]
+![diagram](/assets/images/BS/BS19.jpg)
 
 Get the same input A to 7404 to the second 7408 IC at pin 1:
 
-![[BS20.jpg]]
+![diagram](/assets/images/BS/BS20.jpg)
 
 Now get the input wire B in the third pin of the 7404 IC:
 
-![[BS21.jpg]]
+![diagram](/assets/images/BS/BS21.jpg)
 
 From the same column where you inserted input B in 7404, get B input to the second pin in the first 7408:
 
-![[BS22.jpg]]
+![diagram](/assets/images/BS/BS22.jpg)
 
 From the 4th pin in 7404 which should output inverted B, get a wire to the second pin in the second 7408:
 
-![[BS23.jpg]]
+![diagram](/assets/images/BS/BS23.jpg)
 
 The output for the first 7408 should give `A'B` which will be the first input to our 7432:
 
-![[BS24.jpg]]
+![diagram](/assets/images/BS/BS24.jpg)
 
 Similarly from our second 7408 we have `AB'` which will be our second input for 7432:
 
-![[BS25.jpg]]
+![diagram](/assets/images/BS/BS25.jpg)
 
 Get the resistor...
 
-![[BS26.jpg]]
+![diagram](/assets/images/BS/BS26.jpg)
 
 Now lets analyze when A is at HIGH supply and B is at ground, the LED lights up:
 
@@ -464,7 +465,7 @@ Now lets analyze when A is at HIGH supply and B is at ground, the LED lights up:
 | 1   | 0   | 0   | 1   | 0     | 1    | 1         |
 
 
-![[BS27.jpg]]
+![diagram](/assets/images/BS/BS27.jpg)
 
 When both A and B are HIGH, our output is 0:
 
@@ -472,7 +473,7 @@ When both A and B are HIGH, our output is 0:
 | --- | --- | --- | --- | ----- | ---- | --------- |
 | 1   | 1   | 0   | 0   | 0     | 0    | 0         |
 
-![[BS28.jpg]]
+![diagram](/assets/images/BS/BS28.jpg)
 
 When both A and B are LOW, our output is again 0:
 
@@ -481,7 +482,7 @@ When both A and B are LOW, our output is again 0:
 | 0   | 0   | 1   | 1   | 0     | 0    | 0         |
 
 
-![[BS29.jpg]]
+![diagram](/assets/images/BS/BS29.jpg)
 
 When A is 0 and B is 1, then our output is again HIGH:
 
@@ -490,7 +491,7 @@ When A is 0 and B is 1, then our output is again HIGH:
 | 0   | 1   | 1   | 0   | 1     | 1    | 1         |
 
 
-![[BS30.jpg]]
+![diagram](/assets/images/BS/BS30.jpg)
 
 This exactly mimics an XOR gate!
 
