@@ -5,9 +5,9 @@ categories: [Digital Logic Design]
 date: 2026-11-17
 classes: wide
 tags:
-  - DLD
+  - Digital Logic Design
   - dld
-  - hardware
+  - Hardware
 ---
 
 We have learned all the basic gates such as AND, OR, NOT, NAND, NOR, XOR and XNOR. Each gate has a truth table that tells us what it does. But a real circuit can have dozens of gates connected together, and a truth table for the whole circuit quickly becomes too large to handle. We need a way to **write down** a circuit with symbols, and to **change** that writing into something shorter without changing what the circuit does. That tool is **Boolean algebra**.
