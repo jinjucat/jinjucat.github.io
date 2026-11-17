@@ -298,6 +298,7 @@ Two AND gates, a NOT gate and an OR gate become a single wire. Lets take a look 
 | 0   | 1   | 0   | 0   | 0    | 0          | 0   |
 | 1   | 0   | 1   | 0   | 1    | 1          | 1   |
 | 1   | 1   | 0   | 1   | 0    | 1          | 1   |
+
 We see that the last two columns yield the same results hence our simplification was correct. Getting our 7408 IC on the breadboard:
 
 ![diagram](/assets/images/BS/BS1.jpg)
@@ -405,6 +406,7 @@ Lets make the truth table for this:
 | 0   | 1   | 1   | 0   | 1       | 1     | 1                   |
 | 1   | 0   | 0   | 1   | 1       | 1     | 1                   |
 | 1   | 1   | 0   | 0   | 0       | 1     | 0                   |
+
 And for our simplified expressions:
 
 | A   | B   | A'  | B'  | A' .B | A.B' | A'B + AB' |
@@ -481,7 +483,6 @@ When both A and B are LOW, our output is again 0:
 | --- | --- | --- | --- | ----- | ---- | --------- |
 | 0   | 0   | 1   | 1   | 0     | 0    | 0         |
 
-
 ![diagram](/assets/images/BS/BS29.jpg)
 
 When A is 0 and B is 1, then our output is again HIGH:
@@ -489,7 +490,6 @@ When A is 0 and B is 1, then our output is again HIGH:
 | A   | B   | A'  | B'  | A' .B | A.B' | A'B + AB' |
 | --- | --- | --- | --- | ----- | ---- | --------- |
 | 0   | 1   | 1   | 0   | 1     | 1    | 1         |
-
 
 ![diagram](/assets/images/BS/BS30.jpg)
 
